@@ -6,19 +6,27 @@
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+		"test": "vitest",
+		"coverage": "vitest run --coverage",
 		"version": "node version-bump.mjs && git add manifest.json versions.json"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "MIT",
 	"devDependencies": {
+		"@types/crypto-js": "^4.1.1",
 		"@types/node": "^16.11.6",
 		"@typescript-eslint/eslint-plugin": "^5.2.0",
 		"@typescript-eslint/parser": "^5.2.0",
 		"builtin-modules": "^3.2.0",
+		"c8": "^7.11.3",
 		"esbuild": "0.13.12",
 		"obsidian": "latest",
 		"tslib": "2.3.1",
-		"typescript": "4.4.4"
+		"typescript": "4.4.4",
+		"vitest": "^0.15.1"
+	},
+	"dependencies": {
+		"crypto-js": "^4.1.1"
 	}
 }

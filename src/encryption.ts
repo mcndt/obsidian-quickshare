@@ -1,13 +1,13 @@
 import { MarkdownView, moment } from "obsidian";
 import { generateKey, encryptString } from "./crypto";
 
-interface encryptedMarkdown {
+export interface EncryptedMarkdown {
 	ciphertext: string;
 	hmac: string;
 	key: string;
 }
 
-export function encryptMarkdown(mdView: MarkdownView): encryptedMarkdown {
+export function encryptMarkdown(mdView: MarkdownView): EncryptedMarkdown {
 	const plaintext = mdView.getViewData();
 	const key = generateKey(moment.now() + plaintext);
 	const { ciphertext, hmac } = encryptString(plaintext, key);

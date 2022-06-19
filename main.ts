@@ -1,51 +1,46 @@
 import { App, MarkdownView, Plugin, PluginSettingTab, Setting } from "obsidian";
 import { encryptMarkdown } from "src/encryption";
+import { NoteSharingService } from "src/NoteSharingService";
 
 // Remember to rename these classes and interfaces!
 
 interface MyPluginSettings {
-	mySetting: string;
+	serverUrl: string;
 }
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: "default",
+	serverUrl: "http://localhost:8080",
 };
 
 export default class MyPlugin extends Plugin {
 	settings: MyPluginSettings;
+	noteSharingService: NoteSharingService;
 
 	async onload() {
 		await this.loadSettings();
+		this.noteSharingService = new NoteSharingService(
+			this.settings.serverUrl
+		);
+
+		// This adds a settings tab so the user can configure various aspects of the plugin
+		this.addSettingTab(new SettingsTab(this.app, this));
 
 		// This adds a complex command that can check whether the current state of the app allows execution of the command
 		this.addCommand({
-			id: "open-sample-modal-complex",
-			name: "Open sample modal (complex)",
+			id: "obsidian-note-sharing-share-note",
+			name: "Create share link",
 			checkCallback: (checking: boolean) => {
 				// Conditions to check
 				const markdownView =
 					this.app.workspace.getActiveViewOfType(MarkdownView);
 				if (markdownView) {
-					// If checking is true, we're simply "checking" if the command can be run.
-					// If checking is false, then we want to actually perform the operation.
 					if (!checking) {
-						this.shareNote(markdownView);
+						this.noteSharingService.shareNote(markdownView);
 					}
-
-					// This command will only show up in Command Palette when the check function returns true
 					return true;
 				}
 			},
 		});
-
-		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SampleSettingTab(this.app, this));
-	}
-
-	// ENCRYPT AND SHARE MD NOTE
-	private shareNote(mdView: MarkdownView) {
-		const cryptData = encryptMarkdown(mdView);
-		console.log(cryptData);
 	}
 
 	onunload() {}
@@ -60,10 +55,11 @@ export default class MyPlugin extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
+		this.noteSharingService.serverUrl = this.settings.serverUrl;
 	}
 }
 
-class SampleSettingTab extends PluginSettingTab {
+class SettingsTab extends PluginSettingTab {
 	plugin: MyPlugin;
 
 	constructor(app: App, plugin: MyPlugin) {
@@ -76,18 +72,17 @@ class SampleSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl("h2", { text: "Settings for my awesome plugin." });
+		containerEl.createEl("h2", { text: "Obsidian Note Sharing" });
 
 		new Setting(containerEl)
-			.setName("Setting #1")
-			.setDesc("It's a secret")
+			.setName("Server URL")
+			.setDesc("Server URL hosting the encrypted notes.")
 			.addText((text) =>
 				text
-					.setPlaceholder("Enter your secret")
-					.setValue(this.plugin.settings.mySetting)
+					.setPlaceholder("enter URL")
+					.setValue(this.plugin.settings.serverUrl)
 					.onChange(async (value) => {
-						console.log("Secret: " + value);
-						this.plugin.settings.mySetting = value;
+						this.plugin.settings.serverUrl = value;
 						await this.plugin.saveSettings();
 					})
 			);

@@ -29,8 +29,7 @@ export class NoteSharingService {
 		});
 
 		if (res.status == 200 && res.json != null) {
-			const id = res.json.id;
-			return `${this._url}/note/${id}`;
+			return res.json.view_url;
 		}
 		throw Error("Did not get expected response from server on note POST.");
 	}

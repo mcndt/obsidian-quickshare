@@ -1,10 +1,19 @@
 import "dotenv/config";
 import express, { Express, Request, Response } from "express";
+import cors from "cors";
 import { PrismaClient, EncryptedNote } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 const app: Express = express();
+
+if (process.env.ENVIRONMENT == "dev") {
+  app.use(
+    cors({
+      origin: "*",
+    })
+  );
+}
 
 app.use(express.json());
 
@@ -12,12 +21,6 @@ app.use(express.json());
 app.listen(process.env.PORT, () => {
   console.log(`server started at http://localhost:${process.env.PORT}`);
 });
-
-// type EncryptedNote = {
-//   id?: string;
-//   ciphertext: string;
-//   hmac: string;
-// };
 
 // Post new encrypted note
 app.post("/note/", async (req: Request<{}, {}, EncryptedNote>, res) => {

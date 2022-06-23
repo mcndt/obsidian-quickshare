@@ -6,7 +6,7 @@
 <div id="navbar" class="h-14 border-b border-neutral-200">
 	<div
 		id="navbar-content"
-		class="h-full px-4 6xl:px-0 max-w-6xl mx-auto flex items-center justify-between content-center"
+		class="h-full px-4 6xl:px-0 max-w-6xl mx-auto flex items-center justify-between content-center whitespace-nowrap "
 	>
 		<div id="navbar-left" class="flex gap-8 flex">
 			<a href="/">

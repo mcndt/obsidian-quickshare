@@ -21,7 +21,7 @@
 	import { browser } from '$app/env';
 	import decrypt from '$lib/crypto/decrypt';
 	import MarkdownRenderer from '$lib/components/MarkdownRenderer.svelte';
-	import FaMarkdown from 'svelte-icons/fa/FaMarkdown.svelte';
+	import LogoMarkdown from 'svelte-icons/io/IoLogoMarkdown.svelte';
 
 	export let note: EncryptedNote;
 	let plaintext: string;
@@ -43,7 +43,7 @@
 		<span class="uppercase">Shared 7 days ago</span>
 		<button class="flex gap-2 uppercase items-center">
 			<span>Raw Markdown</span>
-			<span class="h-4"><FaMarkdown /></span>
+			<span class="h-6"><LogoMarkdown /></span>
 		</button>
 	</p>
 

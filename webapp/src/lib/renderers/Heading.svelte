@@ -12,18 +12,19 @@
 	// $: id = options.headerIds ? options.headerPrefix + slug(text) : undefined;
 </script>
 
+<!-- h1-h4 is taken care of by Tailwind Typography plugin. -->
 {#if depth === 1}
-	<h1 {id} class="text-3xl font-bold"><slot /></h1>
+	<h1 {id}><slot /></h1>
 {:else if depth === 2}
-	<h2 {id} class="text-2xl font-bold"><slot /></h2>
+	<h2 {id}><slot /></h2>
 {:else if depth === 3}
-	<h3 {id} class="text-xl font-bold"><slot /></h3>
+	<h3 {id}><slot /></h3>
 {:else if depth === 4}
 	<h4 {id}><slot /></h4>
 {:else if depth === 5}
-	<h5 {id}><slot /></h5>
+	<h5 {id} class="font-semibold"><slot /></h5>
 {:else if depth === 6}
-	<h6 {id}><slot /></h6>
+	<h6 {id} class="font-semibold"><slot /></h6>
 {:else}
 	{raw}
 {/if}

@@ -15,7 +15,9 @@
 					<NavBarLink href="/install">Get plugin</NavBarLink>
 				</svelte:fragment>
 				<svelte:fragment slot="right">
-					<span>Dark mode</span>
+					<NavBarLink href="https://obsidian.md"
+						><span class="text-[#705dcf] font-bold">Get Obsidian</span></NavBarLink
+					>
 					<NavBarLink href="https://github.com/mcndt/obsidian-note-sharing">
 						<span class="h-7 text-black"><LogoGithub /></span>
 					</NavBarLink>
@@ -27,9 +29,8 @@
 
 	<div class="container mx-auto max-w-4xl mx-auto mt-12 px-4 2xl:px-0 prose-neutral">
 		<slot />
-	</div>
-
-	<div class="mt-12">
-		<Footer />
+		<div class="mt-12">
+			<Footer />
+		</div>
 	</div>
 </div>

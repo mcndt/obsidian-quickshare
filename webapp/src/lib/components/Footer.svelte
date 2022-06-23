@@ -1,3 +1,5 @@
+<hr />
+
 <footer class="p-8 text-center flex flex-wrap justify-center items-center gap-x-2 text-neutral-500">
 	<span>
 		Built with love by <a class="underline" href="https://mcndt.dev" alt="blog">mcndt</a>

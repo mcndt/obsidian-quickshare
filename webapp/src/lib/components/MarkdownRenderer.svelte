@@ -3,7 +3,6 @@
 	import Heading from '$lib/marked/renderers/Heading.svelte';
 	import List from '$lib/marked/renderers/List.svelte';
 	import InternalLink from '$lib/marked/renderers/InternalLink.svelte';
-	import tokenizer from '$lib/marked/tokenizer';
 	import { marked } from 'marked';
 	import extensions from '$lib/marked/extensions';
 
@@ -12,7 +11,7 @@
 	// @ts-ignore: typing mismatch
 	marked.use({ extensions: extensions });
 
-	const options = marked.defaults;
+	const options = { ...marked.defaults, breaks: true };
 </script>
 
 <div

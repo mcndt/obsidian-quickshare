@@ -7,10 +7,9 @@ const InternalLinkExtension = {
 	tokenizer(src: string) {
 		const match = src.match(/^\[\[([^\n]+?)]\]/);
 		if (match) {
-			console.log(match);
 			return {
 				type: 'internal-link',
-				raw: match[0],
+				raw: match[0].trim(),
 				text: match[1].trim()
 			};
 		}
@@ -18,4 +17,26 @@ const InternalLinkExtension = {
 	}
 };
 
-export default [InternalLinkExtension];
+const TagExtension = {
+	name: 'tag',
+	level: 'inline',
+	start(src: string) {
+		return src.match(/#/)?.index;
+	},
+	tokenizer(src: string) {
+		const match = src.match(/^#([\w/]+)[\W\s]/);
+		if (match) {
+			console.log(match);
+			return {
+				type: 'tag',
+				raw: match[0].trim(),
+				text: match[1].trim()
+			};
+		}
+		return false;
+	}
+};
+
+export default [InternalLinkExtension, TagExtension];
+
+// ^\#([\w\/]+)\W*

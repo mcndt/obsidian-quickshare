@@ -15,6 +15,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/kit": "^1.0.0-next.350",
+		"@tailwindcss/typography": "^0.5.2",
 		"@types/crypto-js": "^4.1.1",
 		"@typescript-eslint/eslint-plugin": "^5.27.0",
 		"@typescript-eslint/parser": "^5.27.0",
@@ -35,6 +36,7 @@
 	"type": "module",
 	"dependencies": {
 		"crypto-js": "^4.1.1",
+		"svelte-icons": "^2.1.0",
 		"svelte-markdown": "^0.2.2"
 	}
 }

@@ -21,6 +21,7 @@
 	import { browser } from '$app/env';
 	import decrypt from '$lib/crypto/decrypt';
 	import MarkdownRenderer from '$lib/components/MarkdownRenderer.svelte';
+	import FaMarkdown from 'svelte-icons/fa/FaMarkdown.svelte';
 
 	export let note: EncryptedNote;
 	let plaintext: string;
@@ -37,10 +38,16 @@
 	});
 </script>
 
-<div class="mb-6">
-	<p class="text-neutral-500">Note shared {note.insert_time.toLocaleString('en-GB')}</p>
-</div>
+<div class="max-w-2xl mx-auto">
+	<p class="mb-4 text-sm flex justify-between text-neutral-500">
+		<span class="uppercase">Shared 7 days ago</span>
+		<button class="flex gap-2 uppercase items-center">
+			<span>Raw Markdown</span>
+			<span class="h-4"><FaMarkdown /></span>
+		</button>
+	</p>
 
-{#if plaintext}
-	<MarkdownRenderer {plaintext} />
-{/if}
+	{#if plaintext}
+		<MarkdownRenderer {plaintext} />
+	{/if}
+</div>

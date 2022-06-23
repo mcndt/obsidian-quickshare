@@ -30,11 +30,8 @@
 		if (browser) {
 			// Decrypt note
 			const key = location.hash.slice(1);
-			const start = performance.now();
 			plaintext = decrypt({ ...note, key });
-			console.log(performance.now() - start);
 		}
-		console.log(note.insert_time);
 	});
 </script>
 

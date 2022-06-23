@@ -3,7 +3,6 @@
 	// import {  } from 'svelte-markdown';
 	export let depth: number;
 	export let raw: string;
-	export let text: string;
 
 	// const { slug, getOptions } = getContext(key);
 	// const options = getOptions();

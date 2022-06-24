@@ -19,12 +19,14 @@
 		const pos = titleElement.innerHTML.indexOf('<br>');
 		if (pos >= 0) {
 			titleElement.innerHTML = titleElement.innerHTML.substring(pos + 4);
+		} else {
+			titleElement.innerHTML = '';
 		}
 	}
 </script>
 
-<div class="border-l-4 border-l-[#448aff] bg-neutral-100 my-4">
-	<div class="p-[10px] bg-[{color}]/10">
+<div class="border-l-4 border-l-callout bg-neutral-100 my-4">
+	<div class="p-[10px] bg-callout-bg">
 		<span class="font-bold text-md">[{type}]</span>
 		<span class="font-bold text-md">{title}</span>
 	</div>

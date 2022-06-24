@@ -15,6 +15,11 @@
 			type = match[1]?.trim();
 			title = match[2]?.trim() ?? '';
 		}
+		// Remove title from content
+		const pos = titleElement.innerHTML.indexOf('<br>');
+		if (pos >= 0) {
+			titleElement.innerHTML = titleElement.innerHTML.substring(pos + 4);
+		}
 	}
 </script>
 

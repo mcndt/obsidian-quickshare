@@ -26,7 +26,6 @@ const TagExtension = {
 	tokenizer(src: string) {
 		const match = src.match(/^#([\w/]+)[\W\s]/);
 		if (match) {
-			console.log(match);
 			return {
 				type: 'tag',
 				raw: match[0].trim(),
@@ -37,6 +36,25 @@ const TagExtension = {
 	}
 };
 
-export default [InternalLinkExtension, TagExtension];
+const HighlightExtension = {
+	name: 'highlight',
+	level: 'inline',
+	start(src: string) {
+		return src.match(/==/)?.index;
+	},
+	tokenizer(src: string) {
+		const match = src.match(/^==(.+)==/);
+		if (match) {
+			return {
+				type: 'highlight',
+				raw: match[0].trim(),
+				text: match[1].trim()
+			};
+		}
+		return false;
+	}
+};
+
+export default [InternalLinkExtension, TagExtension, HighlightExtension];
 
 // ^\#([\w\/]+)\W*

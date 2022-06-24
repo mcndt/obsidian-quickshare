@@ -1,11 +1,9 @@
 <script lang="ts">
-	import Callout from './Callout.svelte';
+	import Callout from '../../components/Callout.svelte';
 
 	export let raw: string;
 
 	let isCallout: boolean = raw.split('\n')[0].match(/>\s?\[!(.+)\](\s.*|$)/) != null;
-
-	console.log(raw.split('\n')[0]);
 </script>
 
 {#if isCallout}

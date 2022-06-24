@@ -6,118 +6,120 @@ type calloutType = {
 const calloutTypes = {
 	note: {
 		color: 'callout-note',
-		icon: ''
+		icon: 'note'
 	},
 	abstract: {
 		color: 'callout-summary',
-		icon: ''
+		icon: 'summary'
 	},
 	summary: {
 		color: 'callout-summary',
-		icon: ''
+		icon: 'summary'
 	},
 	tldr: {
 		color: 'callout-summary',
-		icon: ''
+		icon: 'summary'
 	},
 	info: {
 		color: 'callout-info',
-		icon: ''
+		icon: 'info'
 	},
 	todo: {
 		color: 'callout-info',
-		icon: ''
+		icon: 'todo'
 	},
 	tip: {
 		color: 'callout-hint',
-		icon: ''
+		icon: 'hint'
 	},
 	hint: {
 		color: 'callout-hint',
-		icon: ''
+		icon: 'hint'
 	},
 	important: {
 		color: 'callout-hint',
-		icon: ''
+		icon: 'hint'
 	},
 	success: {
 		color: 'callout-success',
-		icon: ''
+		icon: 'success'
 	},
 	check: {
 		color: 'callout-success',
-		icon: ''
+		icon: 'success'
 	},
 	done: {
 		color: 'callout-success',
-		icon: ''
+		icon: 'success'
 	},
 	question: {
 		color: 'callout-question',
-		icon: ''
+		icon: 'question'
 	},
 	help: {
 		color: 'callout-question',
-		icon: ''
+		icon: 'question'
 	},
 	faq: {
 		color: 'callout-question',
-		icon: ''
+		icon: 'question'
 	},
 	warning: {
 		color: 'callout-warning',
-		icon: ''
+		icon: 'warning'
 	},
 	caution: {
 		color: 'callout-warning',
-		icon: ''
+		icon: 'warning'
 	},
 	attention: {
 		color: 'callout-warning',
-		icon: ''
+		icon: 'warning'
 	},
 	failure: {
 		color: 'callout-fail',
-		icon: ''
+		icon: 'fail'
 	},
 	fail: {
 		color: 'callout-fail',
-		icon: ''
+		icon: 'fail'
 	},
 	missing: {
 		color: 'callout-fail',
-		icon: ''
+		icon: 'fail'
 	},
 	danger: {
 		color: 'callout-error',
-		icon: ''
+		icon: 'error'
 	},
 	error: {
 		color: 'callout-error',
-		icon: ''
+		icon: 'error'
 	},
 	bug: {
 		color: 'callout-bug',
-		icon: ''
+		icon: 'bug'
 	},
 	example: {
 		color: 'callout-example',
-		icon: ''
+		icon: 'example'
 	},
 	quote: {
 		color: 'callout-quote',
-		icon: ''
+		icon: 'quote'
 	},
 	cite: {
 		color: 'callout-quote',
-		icon: ''
+		icon: 'quote'
 	}
 };
 
-export function getCalloutType(typeString: string): calloutType {
-	return 'note';
+export function getCalloutColor(typeString: string): string {
+	// @ts-expect-error
+	return calloutTypes[typeString.toLowerCase()]?.color ?? 'callout-note';
 }
 
-export function getCalloutColor(): string {
-	return '';
+export function getCalloutIcon(typeString: string): string {
+	// @ts-expect-error
+	return calloutTypes[typeString.toLowerCase()]?.icon ?? 'note';
 }

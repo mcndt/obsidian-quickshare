@@ -5,14 +5,27 @@
 	export const load: Load = async ({ params, fetch, session, stuff }) => {
 		const url = `${import.meta.env.VITE_BACKEND_URL}/note/${params.id}`;
 		const response = await fetch(url);
-		const note: EncryptedNote = await response.json();
 
-		note.insert_time = new Date(note.insert_time as unknown as string);
-
-		return {
-			status: response.status,
-			props: { note }
-		};
+		if (response.ok) {
+			try {
+				const note: EncryptedNote = await response.json();
+				note.insert_time = new Date(note.insert_time as unknown as string);
+				return {
+					status: response.status,
+					props: { note }
+				};
+			} catch {
+				return {
+					status: 500,
+					error: response.statusText
+				};
+			}
+		} else {
+			return {
+				status: response.status,
+				error: response.statusText
+			};
+		}
 	};
 </script>
 

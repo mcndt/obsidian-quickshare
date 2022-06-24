@@ -3,8 +3,9 @@
 	export let start: number;
 </script>
 
+<!-- Styling is taken care of by Tailwind Typography plugin -->
 {#if ordered}
-	<ol class="list-decimal list-inside" {start}><slot /></ol>
+	<ol><slot /></ol>
 {:else}
-	<ul class="list-disc list-inside"><slot /></ul>
+	<ul><slot /></ul>
 {/if}

@@ -8,6 +8,7 @@
 	import Link from '$lib/marked/renderers/Link.svelte';
 	import Tag from '$lib/marked/renderers/Tag.svelte';
 	import Highlight from '$lib/marked/renderers/Highlight.svelte';
+	import InternalEmbed from '$lib/marked/renderers/InternalEmbed.svelte';
 
 	export let plaintext: string;
 
@@ -29,6 +30,7 @@ prose-blockquote:first:before:content-['']"
 			list: List,
 			link: Link,
 			'internal-link': InternalLink,
+			'internal-embed': InternalEmbed,
 			tag: Tag,
 			highlight: Highlight
 		}}

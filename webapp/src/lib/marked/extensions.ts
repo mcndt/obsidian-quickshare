@@ -17,6 +17,25 @@ const InternalLinkExtension = {
 	}
 };
 
+const InternalEmbedExtension = {
+	name: 'internal-embed',
+	level: 'inline',
+	start(src: string) {
+		return src.match(/^!\[\[/)?.index;
+	},
+	tokenizer(src: string) {
+		const match = src.match(/^!\[\[([^\n]+?)]\]/);
+		if (match) {
+			return {
+				type: 'internal-embed',
+				raw: match[0].trim(),
+				text: match[1].trim()
+			};
+		}
+		return false;
+	}
+};
+
 const TagExtension = {
 	name: 'tag',
 	level: 'inline',
@@ -55,6 +74,6 @@ const HighlightExtension = {
 	}
 };
 
-export default [InternalLinkExtension, TagExtension, HighlightExtension];
+export default [InternalLinkExtension, InternalEmbedExtension, TagExtension, HighlightExtension];
 
 // ^\#([\w\/]+)\W*

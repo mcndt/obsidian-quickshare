@@ -3,7 +3,9 @@
 
 	export let raw: string;
 
-	let isCallout: boolean = raw.split('\n')[0].match(/>\s?\[!(.+)\](\s.*)?/) != null;
+	let isCallout: boolean = raw.split('\n')[0].match(/>\s?\[!(.+)\](\s.*|$)/) != null;
+
+	console.log(raw.split('\n')[0]);
 </script>
 
 {#if isCallout}

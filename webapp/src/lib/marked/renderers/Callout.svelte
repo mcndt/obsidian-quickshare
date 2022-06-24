@@ -10,20 +10,12 @@
 
 	$: if (content) {
 		const titleElement = content.getElementsByTagName('p')[0];
-		console.log(titleElement.innerText.split('\n')[0]);
 		const match = titleElement.innerText.split('\n')[0].match(/\[!(.+)\](\s([\w\s]+))?/);
-		console.log(match);
 		if (match) {
-			console.log(match.length);
-			type = match[1];
-			title = match[2] ?? '';
-			console.log(title);
+			type = match[1]?.trim();
+			title = match[2]?.trim() ?? '';
 		}
 	}
-
-	// onMount(() => {
-	// 	console.log('mounted');
-	// });
 </script>
 
 <div class="border-l-4 border-l-[#448aff] bg-neutral-100 my-4">

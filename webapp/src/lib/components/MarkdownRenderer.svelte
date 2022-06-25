@@ -10,6 +10,7 @@
 	import Highlight from '$lib/marked/renderers/Highlight.svelte';
 	import InternalEmbed from '$lib/marked/renderers/InternalEmbed.svelte';
 	import Blockquote from '$lib/marked/renderers/Blockquote.svelte';
+	import MathInline from '$lib/marked/renderers/MathInline.svelte';
 
 	export let plaintext: string;
 
@@ -34,7 +35,8 @@ prose-blockquote:first:before:content-['']"
 			'internal-embed': InternalEmbed,
 			tag: Tag,
 			highlight: Highlight,
-			blockquote: Blockquote
+			blockquote: Blockquote,
+			'math-inline': MathInline
 		}}
 		source={plaintext}
 		{options}

@@ -59,6 +59,7 @@ const HighlightExtension = {
 	name: 'highlight',
 	level: 'inline',
 	start(src: string) {
+		// console.log(src);
 		return src.match(/==/)?.index;
 	},
 	tokenizer(src: string) {
@@ -74,6 +75,33 @@ const HighlightExtension = {
 	}
 };
 
-export default [InternalLinkExtension, InternalEmbedExtension, TagExtension, HighlightExtension];
+const MathInline = {
+	name: 'math-inline',
+	level: 'inline',
+	start(src: string) {
+		return src.indexOf('$');
+	},
+
+	tokenizer(src: string) {
+		const match = src.match(/^(\${1})((?:\\.|.)*)\1/);
+		console.log(src, match);
+		if (match) {
+			return {
+				type: 'math-inline',
+				raw: match[0],
+				text: match[2].trim()
+			};
+		}
+		return false;
+	}
+};
+
+export default [
+	InternalLinkExtension,
+	InternalEmbedExtension,
+	TagExtension,
+	HighlightExtension,
+	MathInline
+];
 
 // ^\#([\w\/]+)\W*

@@ -13,8 +13,6 @@
 	import BugIcon from 'svelte-icons/md/MdBugReport.svelte';
 	import QuoteIcon from 'svelte-icons/md/MdFormatQuote.svelte';
 	export let icon: string;
-
-	console.log(icon);
 </script>
 
 {#if icon == 'note'}

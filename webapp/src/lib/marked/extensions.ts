@@ -83,11 +83,32 @@ const MathInline = {
 	},
 
 	tokenizer(src: string) {
-		const match = src.match(/^(\${1})((?:\\.|.)*)\1/);
-		console.log(src, match);
+		const match = src.match(/^(\${1})((?:\\.|.)+)\1/);
 		if (match) {
 			return {
 				type: 'math-inline',
+				raw: match[0],
+				text: match[2].trim()
+			};
+		}
+		return false;
+	}
+};
+
+const MathBlock = {
+	name: 'math-block',
+	level: 'inline',
+	start(src: string) {
+		return src.indexOf('$$');
+	},
+
+	tokenizer(src: string) {
+		// console.log(src);
+		const match = src.match(/^(\${2})((?:\\.|.|\n)+)\1/m);
+		if (match) {
+			console.log(src, match);
+			return {
+				type: 'math-block',
 				raw: match[0],
 				text: match[2].trim()
 			};
@@ -101,7 +122,8 @@ export default [
 	InternalEmbedExtension,
 	TagExtension,
 	HighlightExtension,
-	MathInline
+	MathInline,
+	MathBlock
 ];
 
 // ^\#([\w\/]+)\W*

@@ -4,4 +4,4 @@
 	export let text: string;
 </script>
 
-<Katex math={text} />
+<Katex math={text} displayMode />

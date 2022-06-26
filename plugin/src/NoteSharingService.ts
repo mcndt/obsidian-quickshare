@@ -1,4 +1,4 @@
-import { MarkdownView, requestUrl } from "obsidian";
+import { requestUrl } from "obsidian";
 import { encryptMarkdown } from "./encryption";
 
 export class NoteSharingService {
@@ -12,8 +12,8 @@ export class NoteSharingService {
 	 * @param mdView Markdown file to share.
 	 * @returns link to shared note with attached decryption key.
 	 */
-	public async shareNote(mdView: MarkdownView): Promise<string> {
-		const cryptData = encryptMarkdown(mdView);
+	public async shareNote(mdText: string): Promise<string> {
+		const cryptData = encryptMarkdown(mdText);
 		let url = await this.postNote(cryptData.ciphertext, cryptData.hmac);
 		url += `#${cryptData.key}`;
 		console.log(`Note shared: ${url}`);

@@ -35,6 +35,7 @@
 	import decrypt from '$lib/crypto/decrypt';
 	import MarkdownRenderer from '$lib/components/MarkdownRenderer.svelte';
 	import LogoMarkdown from 'svelte-icons/io/IoLogoMarkdown.svelte';
+	import IconEncrypted from 'svelte-icons/md/MdLockOutline.svelte';
 
 	export let note: EncryptedNote;
 	let plaintext: string;
@@ -50,7 +51,10 @@
 
 <div class="max-w-2xl mx-auto">
 	<p class="mb-4 text-sm flex justify-between text-neutral-500">
-		<span class="uppercase">Shared ?? days ago</span>
+		<span class="flex gap-1.5 items-center uppercase">
+			<span class="h-5"><IconEncrypted /></span>
+			<span>e2e encrypted | Shared ?? days ago</span>
+		</span>
 		<button class="flex gap-1.5 uppercase items-center">
 			<span>Raw Markdown</span>
 			<span class="h-6"><LogoMarkdown /></span>

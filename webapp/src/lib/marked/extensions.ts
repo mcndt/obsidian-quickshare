@@ -85,7 +85,6 @@ const MathInline = {
 	tokenizer(src: string) {
 		const match = src.match(/^(\${1})((?:\\.|[^$])+)\1/);
 		if (match) {
-			console.log(src, match);
 			return {
 				type: 'math-inline',
 				raw: match[0],
@@ -106,7 +105,6 @@ const MathBlock = {
 	tokenizer(src: string) {
 		const match = src.match(/^(\${2})((?:\\.|[^$]|\n)+)\1/);
 		if (match) {
-			console.log(src, match);
 			return {
 				type: 'math-block',
 				raw: match[0],
@@ -117,39 +115,6 @@ const MathBlock = {
 	}
 };
 
-// const MathInline = {
-// 	name: 'math-block',
-// 	level: 'inline',
-// 	start(src: string) {
-// 		return src.indexOf('$');
-// 	},
-
-// 	tokenizer(src: string) {
-// 		// console.log(src);
-// 		const match = src.match(/^(\${1,2})((?:\\.|[^$]|\n)+)\1/m);
-// 		if (match) {
-// 			console.log(src, match);
-// 			if (match[1] == '$') {
-// 				console.log('inline');
-// 				return {
-// 					type: 'math-inline',
-// 					raw: match[0],
-// 					text: match[2].trim()
-// 				};
-// 			} else if (match[1] == '$$') {
-// 				console.log('block');
-
-// 				return {
-// 					type: 'math-block',
-// 					raw: match[0],
-// 					text: match[2].trim()
-// 				};
-// 			}
-// 		}
-// 		return false;
-// 	}
-// };
-
 export default [
 	InternalLinkExtension,
 	InternalEmbedExtension,
@@ -158,5 +123,3 @@ export default [
 	MathBlock,
 	MathInline
 ];
-
-// ^\#([\w\/]+)\W*

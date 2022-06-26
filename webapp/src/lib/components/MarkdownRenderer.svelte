@@ -12,6 +12,7 @@
 	import Blockquote from '$lib/marked/renderers/Blockquote.svelte';
 	import MathInline from '$lib/marked/renderers/MathInline.svelte';
 	import MathBlock from '$lib/marked/renderers/MathBlock.svelte';
+	import ListItem from '$lib/marked/renderers/ListItem.svelte';
 
 	export let plaintext: string;
 
@@ -31,6 +32,7 @@ prose-blockquote:first:before:content-['']"
 		renderers={{
 			heading: Heading,
 			list: List,
+			listitem: ListItem,
 			link: Link,
 			'internal-link': InternalLink,
 			'internal-embed': InternalEmbed,

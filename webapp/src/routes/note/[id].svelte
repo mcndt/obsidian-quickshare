@@ -10,6 +10,7 @@
 			try {
 				const note: EncryptedNote = await response.json();
 				note.insert_time = new Date(note.insert_time as unknown as string);
+				note.expiry_time = new Date(note.expiry_time as unknown as string);
 				return {
 					status: response.status,
 					props: { note }
@@ -39,21 +40,45 @@
 
 	export let note: EncryptedNote;
 	let plaintext: string;
+	let timeString: string;
 
 	onMount(() => {
 		if (browser) {
 			// Decrypt note
+			console.log(note);
 			const key = location.hash.slice(1);
 			plaintext = decrypt({ ...note, key });
 		}
 	});
+
+	$: if (note.insert_time) {
+		const diff_ms = new Date().valueOf() - note.insert_time.valueOf();
+		timeString = msToString(diff_ms);
+	}
+
+	function msToString(ms: number): string {
+		const minutes = ms / 1000 / 60;
+		if (minutes < 60) {
+			return `${Math.floor(minutes)} minute${minutes >= 2 ? 's' : ''}`;
+		}
+		const hours = minutes / 60;
+		if (hours < 24) {
+			return `${Math.floor(hours)} hour${hours >= 2 ? 's' : ''}`;
+		}
+		const days = hours / 24;
+		if (days < 30.42) {
+			return `${Math.floor(days)} day${days >= 2 ? 's' : ''}`;
+		}
+		const months = days / 30.42;
+		return `${Math.floor(months)} month${months >= 2 ? 's' : ''}`;
+	}
 </script>
 
 <div class="max-w-2xl mx-auto">
 	<p class="mb-4 text-sm flex justify-between text-neutral-500">
 		<span class="flex gap-1.5 items-center uppercase">
 			<span class="h-5"><IconEncrypted /></span>
-			<span>e2e encrypted | Shared ?? days ago</span>
+			<span>e2e encrypted | <span>Shared {timeString} ago</span></span>
 		</span>
 		<button class="flex gap-1.5 uppercase items-center">
 			<span>Raw Markdown</span>

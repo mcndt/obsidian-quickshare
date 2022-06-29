@@ -1,9 +1,10 @@
 import "dotenv/config";
-import express, { Express, Request, Response } from "express";
+import express, { Express, Request } from "express";
 import cors from "cors";
 import { PrismaClient, EncryptedNote } from "@prisma/client";
 import { addDays } from "./util";
 import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 
 // Initialize middleware clients
 const prisma = new PrismaClient();
@@ -21,22 +22,35 @@ if (process.env.ENVIRONMENT == "dev") {
   );
 }
 
+// Apply rate limiting
+const postLimiter = rateLimit({
+  windowMs: 5000, // 1 day
+  // windowMs: 1000 * 60 * 60 * 24, // 1 day
+  max: 1, // Limit each IP to 50 requests per window
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
 // start the Express server
 app.listen(process.env.PORT, () => {
   console.log(`server started at http://localhost:${process.env.PORT}`);
 });
 
 // Post new encrypted note
-app.post("/note/", async (req: Request<{}, {}, EncryptedNote>, res) => {
-  const note = req.body;
-  const savedNote = await prisma.encryptedNote.create({
-    data: { ...note, expire_time: addDays(new Date(), 30) },
-  });
-  res.json({
-    view_url: `${process.env.FRONTEND_URL}/note/${savedNote.id}`,
-    expire_time: savedNote.expire_time,
-  });
-});
+app.post(
+  "/note/",
+  postLimiter,
+  async (req: Request<{}, {}, EncryptedNote>, res) => {
+    const note = req.body;
+    const savedNote = await prisma.encryptedNote.create({
+      data: { ...note, expire_time: addDays(new Date(), 30) },
+    });
+    res.json({
+      view_url: `${process.env.FRONTEND_URL}/note/${savedNote.id}`,
+      expire_time: savedNote.expire_time,
+    });
+  }
+);
 
 // Get encrypted note
 app.get("/note/:id", async (req, res) => {

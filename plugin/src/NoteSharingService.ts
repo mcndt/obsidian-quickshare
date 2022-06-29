@@ -9,7 +9,7 @@ export class NoteSharingService {
 	}
 
 	/**
-	 * @param mdView Markdown file to share.
+	 * @param mdText Markdown file to share.
 	 * @returns link to shared note with attached decryption key.
 	 */
 	public async shareNote(mdText: string): Promise<string> {

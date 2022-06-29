@@ -3,12 +3,14 @@ import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import { PrismaClient, EncryptedNote } from "@prisma/client";
 import { addDays } from "./util";
+import helmet from "helmet";
 
 // Initialize middleware clients
 const prisma = new PrismaClient();
 
 const app: Express = express();
 app.use(express.json());
+app.use(helmet());
 
 // Allow CORS in dev mode.
 if (process.env.ENVIRONMENT == "dev") {

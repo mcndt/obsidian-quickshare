@@ -43,7 +43,9 @@ export class NoteSharingService {
 			returnValue.expire_time = moment(returnValue.expire_time);
 			return <Response>returnValue;
 		}
-		throw Error("Did not get expected response from server on note POST.");
+		throw Error(
+			`Error uploading encrypted note (${res.status}): ${res.text}`
+		);
 	}
 
 	private sanitizeNote(mdText: string): string {

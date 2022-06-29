@@ -1,4 +1,11 @@
-import { MarkdownView, Menu, Plugin, TAbstractFile, TFile } from "obsidian";
+import {
+	MarkdownView,
+	Menu,
+	Notice,
+	Plugin,
+	TAbstractFile,
+	TFile,
+} from "obsidian";
 import { NoteSharingService } from "src/NoteSharingService";
 import { DEFAULT_SETTINGS } from "src/obsidian/PluginSettings";
 import SettingsTab from "src/obsidian/SettingsTab";
@@ -76,7 +83,18 @@ export default class NoteSharingPlugin extends Plugin {
 	}
 
 	async shareNote(mdText: string) {
-		const res = await this.noteSharingService.shareNote(mdText);
-		new SharedNoteSuccessModal(this, res.view_url, res.expire_time).open();
+		this.noteSharingService
+			.shareNote(mdText)
+			.then((res) => {
+				new SharedNoteSuccessModal(
+					this,
+					res.view_url,
+					res.expire_time
+				).open();
+			})
+			.catch((err: Error) => {
+				console.error(err);
+				new Notice(err.message, 7500);
+			});
 	}
 }

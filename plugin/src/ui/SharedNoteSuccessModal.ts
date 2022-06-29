@@ -22,6 +22,7 @@ export class SharedNoteSuccessModal extends Modal {
 			target: this.contentEl,
 			props: {
 				url: this.url,
+				expireDays: 0,
 			},
 		});
 	}

@@ -2,4 +2,4 @@
 	export let url: string;
 </script>
 
-<p>{url}</p>
+<input type="text" bind:value={url} />

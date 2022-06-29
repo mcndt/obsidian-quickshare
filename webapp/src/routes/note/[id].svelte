@@ -42,6 +42,7 @@
 	let plaintext: string;
 	let timeString: string;
 	let decryptFailed = false;
+	let downloadUrl: string;
 
 	onMount(() => {
 		if (browser) {
@@ -56,6 +57,20 @@
 	$: if (note.insert_time) {
 		const diff_ms = new Date().valueOf() - note.insert_time.valueOf();
 		timeString = msToString(diff_ms);
+	}
+
+	$: if (plaintext) {
+		downloadUrl = getDownloadUrl(plaintext);
+	}
+
+	// https://stackoverflow.com/questions/19327749/javascript-blob-filename-without-link
+	function getDownloadUrl(text: string): string {
+		// Make sure the browser reads the data as UTF-8
+		// https://stackoverflow.com/questions/6672834/specifying-blob-encoding-in-google-chrome
+		const BOM = new Uint8Array([0xef, 0xbb, 0xbf]);
+		const blob = new Blob([BOM, text], { type: 'text/plain' });
+		const url = window.URL.createObjectURL(blob);
+		return url;
 	}
 
 	function msToString(ms: number): string {
@@ -83,10 +98,10 @@
 				<span class="h-5"><IconEncrypted /></span>
 				<span>e2e encrypted | <span>Shared {timeString} ago</span></span>
 			</span>
-			<button class="flex gap-1.5 uppercase items-center">
+			<a href={downloadUrl} class="flex gap-1.5 uppercase items-center">
 				<span>Raw Markdown</span>
 				<span class="h-6"><LogoMarkdown /></span>
-			</button>
+			</a>
 		</p>
 		<MarkdownRenderer {plaintext} />
 	</div>

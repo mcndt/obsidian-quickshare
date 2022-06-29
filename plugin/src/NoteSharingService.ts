@@ -13,6 +13,7 @@ export class NoteSharingService {
 	 * @returns link to shared note with attached decryption key.
 	 */
 	public async shareNote(mdText: string): Promise<string> {
+		mdText = this.sanitizeNote(mdText);
 		const cryptData = encryptMarkdown(mdText);
 		let url = await this.postNote(cryptData.ciphertext, cryptData.hmac);
 		url += `#${cryptData.key}`;
@@ -32,6 +33,18 @@ export class NoteSharingService {
 			return res.json.view_url;
 		}
 		throw Error("Did not get expected response from server on note POST.");
+	}
+
+	private sanitizeNote(mdText: string): string {
+		mdText = mdText.trim();
+		const match = mdText.match(
+			/^(?:---\s*\n)(?:(?:.*?\n)*?)(?:---)((?:.|\n|\r)*)/
+		);
+		if (match) {
+			mdText = match[1].trim();
+		}
+		console.log(mdText);
+		return mdText;
 	}
 
 	public set serverUrl(newUrl: string) {

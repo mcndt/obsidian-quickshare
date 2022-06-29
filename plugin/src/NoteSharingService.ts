@@ -22,7 +22,6 @@ export class NoteSharingService {
 		mdText = this.sanitizeNote(mdText);
 		const cryptData = encryptMarkdown(mdText);
 		const res = await this.postNote(cryptData.ciphertext, cryptData.hmac);
-		console.log(res);
 		res.view_url += `#${cryptData.key}`;
 		console.log(`Note shared: ${res.view_url}`);
 		return res;

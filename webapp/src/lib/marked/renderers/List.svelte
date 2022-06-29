@@ -3,7 +3,6 @@
 	export let start: number;
 
 	export let items: any;
-	console.log(items);
 </script>
 
 <!-- Styling is taken care of by Tailwind Typography plugin -->

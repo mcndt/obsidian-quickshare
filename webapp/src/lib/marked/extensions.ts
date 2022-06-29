@@ -59,7 +59,6 @@ const HighlightExtension = {
 	name: 'highlight',
 	level: 'inline',
 	start(src: string) {
-		// console.log(src);
 		return src.match(/==/)?.index;
 	},
 	tokenizer(src: string) {

@@ -1,8 +1,10 @@
-import NoteSharingPlugin from "main";
-import { Modal, TextComponent } from "obsidian";
+import type NoteSharingPlugin from "main";
+import { Modal } from "obsidian";
+import Component from "./SharedNoteSuccessComponent.svelte";
 
 export class SharedNoteSuccessModal extends Modal {
 	private url: string;
+	private component: Component;
 
 	constructor(plugin: NoteSharingPlugin, url: string) {
 		super(plugin.app);
@@ -13,6 +15,18 @@ export class SharedNoteSuccessModal extends Modal {
 
 	render() {
 		this.titleEl.innerText = "Shared note";
-		new TextComponent(this.contentEl).setValue(this.url);
+	}
+
+	async onOpen() {
+		this.component = new Component({
+			target: this.contentEl,
+			props: {
+				url: this.url,
+			},
+		});
+	}
+
+	async onClose() {
+		this.component.$destroy();
 	}
 }

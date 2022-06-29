@@ -1,15 +1,10 @@
-import {
-	EventRef,
-	MarkdownView,
-	Menu,
-	Plugin,
-	TAbstractFile,
-	TFile,
-} from "obsidian";
+import { MarkdownView, Menu, Plugin, TAbstractFile, TFile } from "obsidian";
 import { NoteSharingService } from "src/NoteSharingService";
-import { DEFAULT_SETTINGS, PluginSettings } from "src/obsidian/PluginSettings";
+import { DEFAULT_SETTINGS } from "src/obsidian/PluginSettings";
 import SettingsTab from "src/obsidian/SettingsTab";
 import { SharedNoteSuccessModal } from "src/ui/SharedNoteSuccessModal";
+import type { EventRef } from "obsidian";
+import type { PluginSettings } from "src/obsidian/PluginSettings";
 
 // Remember to rename these classes and interfaces!
 

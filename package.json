@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "dev": "concurrently -n plugin,webapp,server \"npm --prefix ./plugin run dev\" \"npm --prefix ./webapp run dev\" \"npm --prefix ./server run dev\""
+  },
+  "dependencies": {
+    "concurrently": "^7.2.2"
+  }
+}

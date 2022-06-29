@@ -1,5 +1,5 @@
 import { requestUrl } from "obsidian";
-import { encryptMarkdown } from "./encryption";
+import { encryptMarkdown } from "./crypto/encryption";
 
 export class NoteSharingService {
 	private _url: string;

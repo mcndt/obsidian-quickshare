@@ -9,6 +9,7 @@
 		if (response.ok) {
 			try {
 				const note: EncryptedNote = await response.json();
+				console.log(note.expire_time);
 				note.insert_time = new Date(note.insert_time as unknown as string);
 				note.expire_time = new Date(note.expire_time as unknown as string);
 				const maxage = Math.floor((note.expire_time.valueOf() - note.insert_time.valueOf()) / 1000);
@@ -98,7 +99,7 @@
 
 {#if plaintext}
 	<div class="max-w-2xl mx-auto">
-		<p class="mb-4 text-sm flex justify-between text-neutral-500">
+		<p class="mb-4 text-sm flex justify-between text-zinc-500 dark:text-zinc-400">
 			<span class="flex gap-1.5 items-center uppercase">
 				<span class="h-5"><IconEncrypted /></span>
 				<span>e2e encrypted | <span>Shared {timeString} ago</span></span>
@@ -113,7 +114,7 @@
 {/if}
 
 {#if decryptFailed}
-	<div class="prose max-w-2xl">
+	<div class="prose max-w-2xl prose-zinc dark:prose-invert">
 		<h1>Error: Cannot decrypt file</h1>
 		<p class="prose-xl">This note could not be decrypted with this link.</p>
 		<p class="prose-xl">

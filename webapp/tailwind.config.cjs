@@ -1,3 +1,5 @@
+const colors = require('tailwindcss/colors');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	darkMode: 'class',
@@ -5,6 +7,7 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
+				'background-dark': colors.zinc[900],
 				callout: 'rgb(var(--callout-color))',
 				'callout-bg': 'rgba(var(--callout-color), 0.1)'
 			}

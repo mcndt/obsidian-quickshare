@@ -6,8 +6,8 @@
 	import '../app.css';
 </script>
 
-<div class="">
-	<div class="z-50 sticky top-0 w-full bg-white">
+<div class="bg-white dark:bg-background-dark min-h-full">
+	<div class="z-50 sticky top-0 w-full bg-white dark:bg-background-dark">
 		<div class="top-0 left-0 right-0">
 			<NavBar>
 				<svelte:fragment slot="left">
@@ -19,7 +19,7 @@
 						><span class="text-[#705dcf] font-bold">Get Obsidian</span></NavBarLink
 					>
 					<NavBarLink href="https://github.com/mcndt/obsidian-note-sharing">
-						<span class="h-7 text-black"><LogoGithub /></span>
+						<span class="h-7 text-black dark:text-zinc-300"><LogoGithub /></span>
 					</NavBarLink>
 				</svelte:fragment>
 				></NavBar
@@ -27,7 +27,7 @@
 		</div>
 	</div>
 
-	<div class="container mx-auto max-w-4xl mx-auto mt-12 px-4 2xl:px-0 prose-neutral">
+	<div class="container mx-auto max-w-4xl mx-auto mt-12 px-4 2xl:px-0 ">
 		<slot />
 		<div class="mt-12">
 			<Footer />

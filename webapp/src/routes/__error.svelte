@@ -22,7 +22,7 @@
 	export let explainText: string;
 </script>
 
-<div class="prose max-w-2xl">
+<div class="prose max-w-2xl prose-zinc dark:prose-invert">
 	<h1>{title}</h1>
 	<p class="prose-xl">{explainText}</p>
 </div>

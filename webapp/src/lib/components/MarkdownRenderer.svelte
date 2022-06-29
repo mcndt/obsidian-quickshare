@@ -24,7 +24,7 @@
 
 <div
 	id="md-box"
-	class="prose max-w-none prose-li:my-0 prose-ul:mt-0 prose-ol:mt-0 leading-7
+	class="prose prose-zinc dark:prose-invert max-w-none prose-li:my-0 prose-ul:mt-0 prose-ol:mt-0 leading-7
 prose-strong:font-bold prose-a:font-normal prose-blockquote:font-normal prose-blockquote:not-italic
 prose-blockquote:first:before:content-['']"
 >

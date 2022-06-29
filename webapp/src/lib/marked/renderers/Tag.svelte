@@ -1,3 +1,3 @@
-<span class="underline text-neutral-500 cursor-pointer">
+<span class="underline text-zinc-500 dark:text-zinc-400 cursor-pointer">
 	<slot />
 </span>

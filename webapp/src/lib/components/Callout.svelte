@@ -32,7 +32,10 @@
 	}
 </script>
 
-<div style="--callout-color: var({color})" class="border-l-4 border-l-callout bg-neutral-100 my-4">
+<div
+	style="--callout-color: var({color})"
+	class="border-l-4 border-l-callout bg-zinc-100 dark:bg-zinc-800 my-4"
+>
 	<div class="p-[10px] bg-callout-bg flex items-center gap-2">
 		<span class="font-bold text-md text-callout h-5"><CalloutIcon {icon} /></span>
 		<span class="font-bold text-md">{title}</span>

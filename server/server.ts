@@ -24,9 +24,8 @@ if (process.env.ENVIRONMENT == "dev") {
 
 // Apply rate limiting
 const postLimiter = rateLimit({
-  windowMs: 5000, // 1 day
-  // windowMs: 1000 * 60 * 60 * 24, // 1 day
-  max: 1, // Limit each IP to 50 requests per window
+  windowMs: parseInt(process.env.POST_LIMIT_WINDOW_SECONDS as string) * 1000,
+  max: parseInt(process.env.POST_LIMIT as string), // Limit each IP to X requests per window
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });

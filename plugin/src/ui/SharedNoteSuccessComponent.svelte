@@ -1,6 +1,9 @@
 <script lang="ts">
+	import moment, { type Moment } from "moment";
+	import { now } from "svelte/internal";
+
 	export let url: string;
-	export let expireDays: number;
+	export let expireTime: Moment;
 
 	let buttonText = "Copy";
 	let buttonTextTimeout: string | number | NodeJS.Timeout;
@@ -29,7 +32,13 @@
 			on:click={onCopy}>{buttonText}</button
 		>
 	</div>
-	<p id="subtext">🔐 End-to-end encrypted • Expires in {expireDays} days</p>
+	<p id="subtext">
+		🔐 End-to-end encrypted • Expires in {expireTime.diff(
+			moment(),
+			"days"
+		) + 1}
+		days
+	</p>
 </div>
 
 <style scoped>

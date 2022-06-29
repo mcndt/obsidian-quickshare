@@ -1,5 +1,11 @@
+import moment, { type Moment } from "moment";
 import { requestUrl } from "obsidian";
 import { encryptMarkdown } from "./crypto/encryption";
+
+type Response = {
+	view_url: string;
+	expire_time: Moment;
+};
 
 export class NoteSharingService {
 	private _url: string;
@@ -12,16 +18,20 @@ export class NoteSharingService {
 	 * @param mdText Markdown file to share.
 	 * @returns link to shared note with attached decryption key.
 	 */
-	public async shareNote(mdText: string): Promise<string> {
+	public async shareNote(mdText: string): Promise<Response> {
 		mdText = this.sanitizeNote(mdText);
 		const cryptData = encryptMarkdown(mdText);
-		let url = await this.postNote(cryptData.ciphertext, cryptData.hmac);
-		url += `#${cryptData.key}`;
-		console.log(`Note shared: ${url}`);
-		return url;
+		const res = await this.postNote(cryptData.ciphertext, cryptData.hmac);
+		console.log(res);
+		res.view_url += `#${cryptData.key}`;
+		console.log(`Note shared: ${res.view_url}`);
+		return res;
 	}
 
-	private async postNote(ciphertext: string, hmac: string): Promise<string> {
+	private async postNote(
+		ciphertext: string,
+		hmac: string
+	): Promise<Response> {
 		const res = await requestUrl({
 			url: `${this._url}/note`,
 			method: "POST",
@@ -30,7 +40,9 @@ export class NoteSharingService {
 		});
 
 		if (res.status == 200 && res.json != null) {
-			return res.json.view_url;
+			const returnValue = res.json;
+			returnValue.expire_time = moment(returnValue.expire_time);
+			return <Response>returnValue;
 		}
 		throw Error("Did not get expected response from server on note POST.");
 	}
@@ -43,7 +55,6 @@ export class NoteSharingService {
 		if (match) {
 			mdText = match[1].trim();
 		}
-		console.log(mdText);
 		return mdText;
 	}
 

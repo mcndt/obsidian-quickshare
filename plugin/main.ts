@@ -76,7 +76,7 @@ export default class NoteSharingPlugin extends Plugin {
 	}
 
 	async shareNote(mdText: string) {
-		const url = await this.noteSharingService.shareNote(mdText);
-		new SharedNoteSuccessModal(this, url).open();
+		const res = await this.noteSharingService.shareNote(mdText);
+		new SharedNoteSuccessModal(this, res.view_url, res.expire_time).open();
 	}
 }

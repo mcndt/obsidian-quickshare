@@ -30,7 +30,10 @@ app.post("/note/", async (req: Request<{}, {}, EncryptedNote>, res) => {
   const savedNote = await prisma.encryptedNote.create({
     data: { ...note, expire_time: addDays(new Date(), 14) },
   });
-  res.json({ view_url: `${process.env.FRONTEND_URL}/note/${savedNote.id}` });
+  res.json({
+    view_url: `${process.env.FRONTEND_URL}/note/${savedNote.id}`,
+    expire_time: savedNote.expire_time,
+  });
 });
 
 // Get encrypted note

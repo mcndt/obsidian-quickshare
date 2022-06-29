@@ -1,4 +1,4 @@
-<hr class="border-zinc-200 dark:border-zinc-700" />
+<hr class="border-zinc-200 dark:border-zinc-700 transition-colors" />
 
 <footer
 	class="p-8 text-center flex flex-wrap justify-center items-center gap-x-2 text-zinc-500 dark:text-zinc-500"

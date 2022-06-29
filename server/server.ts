@@ -28,7 +28,7 @@ app.listen(process.env.PORT, () => {
 app.post("/note/", async (req: Request<{}, {}, EncryptedNote>, res) => {
   const note = req.body;
   const savedNote = await prisma.encryptedNote.create({
-    data: { ...note, expire_time: addDays(new Date(), 14) },
+    data: { ...note, expire_time: addDays(new Date(), 30) },
   });
   res.json({
     view_url: `${process.env.FRONTEND_URL}/note/${savedNote.id}`,

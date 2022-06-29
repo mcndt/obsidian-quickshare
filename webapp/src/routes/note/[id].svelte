@@ -41,13 +41,15 @@
 	export let note: EncryptedNote;
 	let plaintext: string;
 	let timeString: string;
+	let decryptFailed = false;
 
 	onMount(() => {
 		if (browser) {
 			// Decrypt note
-			console.log(note);
 			const key = location.hash.slice(1);
-			plaintext = decrypt({ ...note, key });
+			decrypt({ ...note, key })
+				.then((value) => (plaintext = value))
+				.catch(() => (decryptFailed = true));
 		}
 	});
 
@@ -74,19 +76,28 @@
 	}
 </script>
 
-<div class="max-w-2xl mx-auto">
-	<p class="mb-4 text-sm flex justify-between text-neutral-500">
-		<span class="flex gap-1.5 items-center uppercase">
-			<span class="h-5"><IconEncrypted /></span>
-			<span>e2e encrypted | <span>Shared {timeString} ago</span></span>
-		</span>
-		<button class="flex gap-1.5 uppercase items-center">
-			<span>Raw Markdown</span>
-			<span class="h-6"><LogoMarkdown /></span>
-		</button>
-	</p>
-
-	{#if plaintext}
+{#if plaintext}
+	<div class="max-w-2xl mx-auto">
+		<p class="mb-4 text-sm flex justify-between text-neutral-500">
+			<span class="flex gap-1.5 items-center uppercase">
+				<span class="h-5"><IconEncrypted /></span>
+				<span>e2e encrypted | <span>Shared {timeString} ago</span></span>
+			</span>
+			<button class="flex gap-1.5 uppercase items-center">
+				<span>Raw Markdown</span>
+				<span class="h-6"><LogoMarkdown /></span>
+			</button>
+		</p>
 		<MarkdownRenderer {plaintext} />
-	{/if}
-</div>
+	</div>
+{/if}
+
+{#if decryptFailed}
+	<div class="prose max-w-2xl">
+		<h1>Error: Cannot decrypt file</h1>
+		<p class="prose-xl">This note could not be decrypted with this link.</p>
+		<p class="prose-xl">
+			If you think this is an error, please double check that you copied the entire URL.
+		</p>
+	</div>
+{/if}

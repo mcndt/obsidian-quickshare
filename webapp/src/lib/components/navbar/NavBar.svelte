@@ -5,7 +5,9 @@
 	>
 		<div id="navbar-left" class="flex gap-6">
 			<a href="/" class="self-center h-full pb-0.5">
-				<span id="name" class="self-center font-bold text-lg dark:text-white">Noteshare.space</span>
+				<span id="name" class="self-center font-bold text-lg dark:text-white"
+					>{import.meta.env.VITE_BRANDING}</span
+				>
 			</a>
 			<ul class="flex gap-2 content-center">
 				<slot name="left" />

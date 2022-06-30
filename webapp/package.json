@@ -36,6 +36,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltejs/adapter-node": "^1.0.0-next.78",
 		"crypto-js": "^4.1.1",
 		"katex": "^0.16.0",
 		"marked": "^4.0.17",

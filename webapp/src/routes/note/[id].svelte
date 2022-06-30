@@ -9,7 +9,6 @@
 		if (response.ok) {
 			try {
 				const note: EncryptedNote = await response.json();
-				console.log(note.expire_time);
 				note.insert_time = new Date(note.insert_time as unknown as string);
 				note.expire_time = new Date(note.expire_time as unknown as string);
 				const maxage = Math.floor((note.expire_time.valueOf() - note.insert_time.valueOf()) / 1000);

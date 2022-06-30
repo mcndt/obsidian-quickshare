@@ -11,16 +11,13 @@ const prisma = new PrismaClient();
 
 const app: Express = express();
 app.use(express.json());
-app.use(helmet());
-
-// Allow CORS in dev mode.
-if (process.env.ENVIRONMENT == "dev") {
-  app.use(
-    cors({
-      origin: "*",
-    })
-  );
-}
+app.use(
+  helmet({
+    crossOriginResourcePolicy: {
+      policy: process.env.ENVIRONMENT == "dev" ? "cross-origin" : "same-origin",
+    },
+  })
+);
 
 // Apply rate limiting
 const postLimiter = rateLimit({

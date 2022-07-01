@@ -1,48 +1,57 @@
 <script context="module" , lang="ts">
 	import type { Load } from '@sveltejs/kit';
-	import type { EncryptedNote } from '$lib/model/EncryptedNote';
 
-	export const load: Load = async ({ params, fetch, session, stuff }) => {
-		const url = `${import.meta.env.VITE_BACKEND_URL}/note/${params.id}`;
-		const response = await fetch(url);
+	export const load: Load = async ({ props }) => {
+		const note: EncryptedNote = props.note;
+		const maxage = Math.floor((note.expire_time.valueOf() - note.insert_time.valueOf()) / 1000);
+		return {
+			status: 200,
+			cache: {
+				maxage: maxage,
+				private: false
+			},
+			props: { note }
+		};
 
-		if (response.ok) {
-			try {
-				const note: EncryptedNote = await response.json();
-				note.insert_time = new Date(note.insert_time as unknown as string);
-				note.expire_time = new Date(note.expire_time as unknown as string);
-				const maxage = Math.floor((note.expire_time.valueOf() - note.insert_time.valueOf()) / 1000);
-				return {
-					status: response.status,
-					cache: {
-						maxage: maxage,
-						private: false
-					},
-					props: { note }
-				};
-			} catch {
-				return {
-					status: 500,
-					error: response.statusText
-				};
-			}
-		} else {
-			return {
-				status: response.status,
-				error: response.statusText
-			};
-		}
+		// if (response.ok) {
+		// 	try {
+		// 		const note: EncryptedNote = await response.json();
+		// 		note.insert_time = new Date(note.insert_time as unknown as string);
+		// 		note.expire_time = new Date(note.expire_time as unknown as string);
+		// 		const maxage = Math.floor((note.expire_time.valueOf() - note.insert_time.valueOf()) / 1000);
+		// 		return {
+		// 			status: response.status,
+		// 			cache: {
+		// 				maxage: maxage,
+		// 				private: false
+		// 			},
+		// 			props: { note }
+		// 		};
+		// 	} catch {
+		// 		return {
+		// 			status: 500,
+		// 			error: response.statusText
+		// 		};
+		// 	}
+		// } else {
+		// 	return {
+		// 		status: response.status,
+		// 		error: response.statusText
+		// 	};
+		// }
 	};
 </script>
 
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { browser } from '$app/env';
 	import decrypt from '$lib/crypto/decrypt';
 	import MarkdownRenderer from '$lib/components/MarkdownRenderer.svelte';
 	import LogoMarkdown from 'svelte-icons/io/IoLogoMarkdown.svelte';
 	import IconEncrypted from 'svelte-icons/md/MdLockOutline.svelte';
+	import type { EncryptedNote } from '$lib/model/EncryptedNote';
+	import { browser } from '$app/env';
 
+	// Auto-loaded from [id].ts endpoint
 	export let note: EncryptedNote;
 	let plaintext: string;
 	let timeString: string;

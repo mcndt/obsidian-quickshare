@@ -9,7 +9,7 @@ RUN npm ci
 # Copy all local files into the image.
 COPY . .
 
-ENV VITE_BACKEND_URL="http://0.0.0.0:8080"
+ENV VITE_SERVER_INTERNAL="http://server:8080"
 ENV VITE_BRANDING="Noteshare.space"
 
 RUN npm run build
@@ -20,8 +20,7 @@ RUN npm prune --production
 FROM node:16-alpine
 
 WORKDIR /app
-COPY --from=0 /app .
-COPY . .
+COPY --from=BUILD_IMAGE /app .
 
 EXPOSE 3000
 CMD ["node", "./build"]

@@ -27,7 +27,7 @@ services:
       - sqlite:/database/
     environment:
       - DATABASE_URL=file:/database/db.sqlite
-      - FRONTEND_URL=http://0.0.0.0:3000
+      - FRONTEND_URL=http://localhost:3000
     depends_on:
       - migrate
 

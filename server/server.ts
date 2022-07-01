@@ -29,7 +29,7 @@ const postLimiter = rateLimit({
 
 // start the Express server
 app.listen(process.env.PORT, () => {
-  console.log(`server started at http://localhost:${process.env.PORT}`);
+  console.log(`server started at port ${process.env.PORT}`);
 });
 
 // Post new encrypted note
@@ -55,6 +55,7 @@ app.get("/note/:id", async (req, res) => {
   });
   if (note != null) {
     res.send(note);
+    console.log(`[GET] Retrieved note <${note.id}> for <${req.ip}>`);
   }
   res.status(404).send();
 });
@@ -63,6 +64,12 @@ app.get("/note/:id", async (req, res) => {
 app.use((req, res, next) => {
   res.status(404).send();
 });
+
+// // Error handling
+// app.use((err, req, res, next) => {
+//   console.error(err.stack);
+//   res.status(500).send("Something broke!");
+// });
 
 // Clean up expired notes periodically
 const interval =

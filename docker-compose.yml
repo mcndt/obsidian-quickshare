@@ -1,0 +1,37 @@
+version: "3.7"
+
+services:
+  webapp:
+    build: 
+      context: ./webapp
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+  
+  migrate:
+    build:
+      context: ./server/prisma
+      dockerfile: Dockerfile
+    volumes:
+      - sqlite:/database/
+    environment:
+      - DATABASE_URL=file:/database/db.sqlite
+  
+  server:
+    build: 
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - sqlite:/database/
+    environment:
+      - DATABASE_URL=file:/database/db.sqlite
+      - FRONTEND_URL=http://0.0.0.0:3000
+    depends_on:
+      - migrate
+
+## By default this config uses default local driver,
+## For custom volumes replace with volume driver configuration.
+volumes:
+  sqlite:

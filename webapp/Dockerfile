@@ -1,5 +1,7 @@
 FROM node:16-alpine AS BUILD_IMAGE
 
+ARG VITE_SERVER_INTERNAL $VITE_SERVER_INTERNAL
+ARG VITE_BRANDING $VITE_BRANDING
 
 # install dependencies
 WORKDIR /app
@@ -8,9 +10,6 @@ RUN npm ci
 
 # Copy all local files into the image.
 COPY . .
-
-ENV VITE_SERVER_INTERNAL="http://server:8080"
-ENV VITE_BRANDING="Noteshare.space"
 
 RUN npm run build
 

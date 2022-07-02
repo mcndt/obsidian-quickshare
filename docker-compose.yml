@@ -5,6 +5,9 @@ services:
     build: 
       context: ./webapp
       dockerfile: Dockerfile
+      args:
+        - VITE_SERVER_INTERNAL=http://server:8080
+        - VITE_BRANDING=Noteshare.space [preview]
     ports:
       - "3000:3000"
   
@@ -28,6 +31,9 @@ services:
     environment:
       - DATABASE_URL=file:/database/db.sqlite
       - FRONTEND_URL=http://localhost:3000
+      - CLEANUP_INTERVAL_SECONDS=600
+      - POST_LIMIT_WINDOW_SECONDS=86400
+      - POST_LIMIT=50
     depends_on:
       - migrate
 

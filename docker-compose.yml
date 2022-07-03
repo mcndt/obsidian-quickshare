@@ -12,7 +12,7 @@ services:
       - DATABASE_URL=file:/database/db.sqlite
   
   # Backend server for managing saved notes 
-  server:
+  backend:
     build: 
       context: ./server
       dockerfile: Dockerfile
@@ -31,7 +31,7 @@ services:
         condition: service_completed_successfully
   
   # Frontend for serving encrypted notes over HTML (SvelteKit)
-  webapp:
+  frontend:
     build: 
       context: ./webapp
       dockerfile: Dockerfile

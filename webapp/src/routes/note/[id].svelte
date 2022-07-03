@@ -12,33 +12,6 @@
 			},
 			props: { note }
 		};
-
-		// if (response.ok) {
-		// 	try {
-		// 		const note: EncryptedNote = await response.json();
-		// 		note.insert_time = new Date(note.insert_time as unknown as string);
-		// 		note.expire_time = new Date(note.expire_time as unknown as string);
-		// 		const maxage = Math.floor((note.expire_time.valueOf() - note.insert_time.valueOf()) / 1000);
-		// 		return {
-		// 			status: response.status,
-		// 			cache: {
-		// 				maxage: maxage,
-		// 				private: false
-		// 			},
-		// 			props: { note }
-		// 		};
-		// 	} catch {
-		// 		return {
-		// 			status: 500,
-		// 			error: response.statusText
-		// 		};
-		// 	}
-		// } else {
-		// 	return {
-		// 		status: response.status,
-		// 		error: response.statusText
-		// 	};
-		// }
 	};
 </script>
 

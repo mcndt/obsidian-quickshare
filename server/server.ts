@@ -34,7 +34,7 @@ app.listen(process.env.PORT, () => {
 
 // Post new encrypted note
 app.post(
-  "/note/",
+  "/api/note/",
   postLimiter,
   async (req: Request<{}, {}, EncryptedNote>, res) => {
     const note = req.body;
@@ -49,7 +49,7 @@ app.post(
 );
 
 // Get encrypted note
-app.get("/note/:id", async (req, res) => {
+app.get("/api/note/:id", async (req, res) => {
   const note = await prisma.encryptedNote.findUnique({
     where: { id: req.params.id },
   });
@@ -62,7 +62,8 @@ app.get("/note/:id", async (req, res) => {
 
 // Default response for any other request
 app.use((req, res, next) => {
-  res.status(404).send();
+  console.log(`Route not found: ${req.path}`);
+  res.status(404).send("Route not found");
 });
 
 // // Error handling

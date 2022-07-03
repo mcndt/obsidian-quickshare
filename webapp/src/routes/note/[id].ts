@@ -2,7 +2,7 @@ import type { EncryptedNote } from '$lib/model/EncryptedNote';
 import type { RequestHandler } from '@sveltejs/kit';
 
 export const get: RequestHandler = async ({ params }) => {
-	const url = `${import.meta.env.VITE_SERVER_INTERNAL}/note/${params.id}`;
+	const url = `${import.meta.env.VITE_SERVER_INTERNAL}/api/note/${params.id}`;
 	const response = await fetch(url);
 
 	if (response.ok) {

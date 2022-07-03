@@ -32,7 +32,7 @@ export class NoteSharingService {
 		hmac: string
 	): Promise<Response> {
 		const res = await requestUrl({
-			url: `${this._url}/note`,
+			url: `${this._url}/api/note`,
 			method: "POST",
 			contentType: "application/json",
 			body: JSON.stringify({ ciphertext, hmac }),

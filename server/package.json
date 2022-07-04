@@ -4,9 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test-watch": "vitest",
-    "test": "vitest run",
-    "coverage": "vitest run --coverage",
+    "test": "echo 'No tests set up for the server.'",
+    "coverage": "echo 'No coverage set up for the server.'",
     "build": "npx tsc",
     "dev": "npx nodemon ./server.ts"
   },
@@ -30,7 +29,6 @@
     "prisma": "^4.0.0",
     "supertest": "^6.2.3",
     "ts-node": "^10.8.1",
-    "typescript": "^4.7.4",
-    "vitest": "^0.15.1"
+    "typescript": "^4.7.4"
   }
 }

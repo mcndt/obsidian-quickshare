@@ -23,14 +23,15 @@
 	import IconEncrypted from 'svelte-icons/md/MdLockOutline.svelte';
 	import type { EncryptedNote } from '$lib/model/EncryptedNote';
 	import { browser } from '$app/env';
+	import RawRenderer from '$lib/components/RawRenderer.svelte';
+	import LogoDocument from 'svelte-icons/md/MdUndo.svelte';
 
 	// Auto-loaded from [id].ts endpoint
 	export let note: EncryptedNote;
 	let plaintext: string;
 	let timeString: string;
 	let decryptFailed = false;
-	// let downloadUrl: string;
-	let downloadRef: HTMLAnchorElement;
+	let showRaw = false;
 
 	onMount(() => {
 		if (browser) {
@@ -47,23 +48,8 @@
 		timeString = msToString(diff_ms);
 	}
 
-	// $: if (plaintext) {
-	// 	downloadUrl = downloadMd(plaintext);
-	// }
-
-	// https://stackoverflow.com/questions/19327749/javascript-blob-filename-without-link
-	function downloadMd() {
-		if (plaintext === undefined) return;
-		// Make sure the browser reads the data as UTF-8
-		// https://stackoverflow.com/questions/6672834/specifying-blob-encoding-in-google-chrome
-		const BOM = new Uint8Array([0xef, 0xbb, 0xbf]);
-		const blob = new Blob([BOM, plaintext], { type: 'text/plain' });
-		const url = window.URL.createObjectURL(blob);
-		console.log(url);
-		downloadRef.href = url;
-		downloadRef.click();
-		window.URL.revokeObjectURL(blob);
-		return url;
+	function toggleRaw() {
+		showRaw = !showRaw;
 	}
 
 	function msToString(ms: number): string {
@@ -91,13 +77,21 @@
 				<span class="h-5"><IconEncrypted /></span>
 				<span>e2e encrypted | <span>Shared {timeString} ago</span></span>
 			</span>
-			<button on:click={downloadMd} class="flex gap-1.5 uppercase items-center hover:underline">
-				<span>Raw Markdown</span>
-				<span class="h-6"><LogoMarkdown /></span>
-				<a hidden bind:this={downloadRef} href="./">.</a>
+			<button on:click={toggleRaw} class="flex gap-1.5 uppercase items-center hover:underline">
+				{#if showRaw}
+					<span class="h-6"><LogoDocument /> </span>
+					<span>Render Document</span>
+				{:else}
+					<span>Raw Markdown</span>
+					<span class="h-6"><LogoMarkdown /> </span>
+				{/if}
 			</button>
 		</p>
-		<MarkdownRenderer {plaintext} />
+		{#if showRaw}
+			<RawRenderer>{plaintext}</RawRenderer>
+		{:else}
+			<MarkdownRenderer {plaintext} />
+		{/if}
 	</div>
 {/if}
 

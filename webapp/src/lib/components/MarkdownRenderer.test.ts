@@ -5,20 +5,72 @@ import MarkdownRenderer from './MarkdownRenderer.svelte';
 
 const TEST_FILES_DIR = 'test/markdown/';
 
-describe('Callout rendering', () => {
-	it('Renders callout correctly ', async () => {
-		const plaintext = await readMd('callout.md');
+// rendering links
+describe('rendering [[internal]] links', async () => {
+	const plaintext = await readMd('links.md');
 
+	it('Renders [[links]] correctly', async () => {
 		render(MarkdownRenderer, { plaintext: plaintext });
+		const linkEl = await screen.findByText(/^Normal internal link$/);
+		expect(linkEl).toBeInTheDocument();
+	});
 
-		// Expect title to be correct.
+	it('Renders [[links|with alias]] correctly', async () => {
+		render(MarkdownRenderer, { plaintext: plaintext });
+		const linkEl = await screen.findByText(/^Link with alias$/);
+		expect(linkEl).toBeInTheDocument();
+	});
+
+	it('Renders [[links#heading]] correctly', async () => {
+		render(MarkdownRenderer, { plaintext: plaintext });
+		const linkEl = await screen.findByText(/^Page with headings > heading A$/);
+		expect(linkEl).toBeInTheDocument();
+	});
+
+	it('Renders [[links#heading|with alias]] correctly', async () => {
+		render(MarkdownRenderer, { plaintext: plaintext });
+		const linkEl = await screen.findByText(/^Link with heading alias$/);
+		expect(linkEl).toBeInTheDocument();
+	});
+
+	it('Renders [[links#heading|with alias#fakeheading]] correctly', async () => {
+		render(MarkdownRenderer, { plaintext: plaintext });
+		const linkEl = await screen.findByText(/^Link with heading alias#false heading$/);
+		expect(linkEl).toBeInTheDocument();
+	});
+
+	it('Does not render [[]] empty links', async () => {
+		render(MarkdownRenderer, { plaintext: plaintext });
+		const textEl = await screen.findByText('[[]]', { exact: false });
+		expect(textEl).toBeInTheDocument();
+	});
+});
+
+describe('rendering [md style](links)', async () => {
+	const plaintext = await readMd('links.md');
+
+	it('Renders URL-encoded internal links correctly', async () => {
+		render(MarkdownRenderer, { plaintext: plaintext });
+		const linkEl = await screen.findByText(/^Classic internal link (URL encoded)$/);
+		expect(linkEl).toBeInTheDocument();
+	});
+});
+
+describe('Rendering callouts', async () => {
+	const plaintext = await readMd('callout.md');
+
+	it('Renders callout title correctly ', async () => {
+		render(MarkdownRenderer, { plaintext: plaintext });
 		const titleEl = await screen.findByText('Don!t forget to account for non-letters! //fsd \\n');
 		expect(titleEl).toBeInTheDocument();
 		expect(titleEl).toHaveClass('callout-title');
+	});
 
-		// Expect content to be correct.
-		expect(await screen.findByText('Sample text.')).toBeInTheDocument();
-		expect((await screen.findByText('Sample text.')).parentNode).toHaveClass('callout-content');
+	it('Renders callout content correctly ', async () => {
+		render(MarkdownRenderer, { plaintext: plaintext });
+		const contentEl = await screen.findByText('Sample text.');
+		expect(contentEl).toBeInTheDocument();
+		expect(contentEl.parentElement).toHaveClass('callout-content');
 	});
 });
 

@@ -1,8 +1,6 @@
 <script lang="ts">
 	export let href = '';
 	export let title: string;
-	// import LinkIcon from 'svelte-icons/fa/FaExternalLinkSquareAlt.svelte';
-	// import LinkIcon from 'svelte-icons/fa/FaLink.svelte';
 	import LinkIcon from 'svelte-icons/md/MdOpenInNew.svelte';
 </script>
 

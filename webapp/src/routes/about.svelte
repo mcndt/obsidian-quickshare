@@ -1,4 +1,8 @@
-<div class="prose">
+<svelte:head>
+	<title>About | {import.meta.env.VITE_BRANDING}</title>
+</svelte:head>
+
+<div class="prose dark:prose-invert">
 	<h2>About</h2>
 
 	<p>

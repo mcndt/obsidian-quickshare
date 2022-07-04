@@ -1,4 +1,8 @@
-<div class="prose">
+<svelte:head>
+	<title>Get the plugin | {import.meta.env.VITE_BRANDING}</title>
+</svelte:head>
+
+<div class="prose dark:prose-invert">
 	<h2>Installing the plugin</h2>
 
 	<p>

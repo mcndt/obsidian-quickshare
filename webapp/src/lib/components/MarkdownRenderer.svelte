@@ -22,6 +22,9 @@
 
 	const options = { ...marked.defaults, breaks: true };
 
+	/**
+	 * Searches for the first major header in the document to use as page title.
+	 */
 	function setTitle() {
 		const tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
 		for (const tag of tags) {

@@ -29,6 +29,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>{import.meta.env.VITE_BRANDING}</title>
+</svelte:head>
+
 <div class=" h-full {dark !== undefined ? '' : 'hidden'} {dark ? darkTheme : ''}">
 	<div class="bg-white dark:bg-background-dark min-h-full transition-colors">
 		<div class="z-50 sticky top-0 w-full bg-white dark:bg-background-dark transition-colors">

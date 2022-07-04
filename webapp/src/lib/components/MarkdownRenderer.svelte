@@ -23,9 +23,13 @@
 	const options = { ...marked.defaults, breaks: true };
 
 	function setTitle() {
-		const res = ref.querySelector('h1');
-		if (res) {
-			document.title = res.innerText;
+		const tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+		for (const tag of tags) {
+			const element: HTMLHeadingElement | null = ref.querySelector(tag);
+			if (element && element.innerText.trim().length > 0) {
+				document.title = element.innerText.trim();
+				break;
+			}
 		}
 	}
 </script>

@@ -12,7 +12,12 @@ const config = {
 		})
 	],
 	kit: {
-		adapter: adapter()
+		adapter: adapter(),
+		vite: {
+			test: {
+				environment: 'happy-dom'
+			}
+		}
 	}
 };
 

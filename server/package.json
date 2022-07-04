@@ -4,7 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "vitest",
+    "test-watch": "vitest",
+    "test": "vitest run",
+    "coverage": "vitest run --coverage",
     "build": "npx tsc",
     "dev": "npx nodemon ./server.ts"
   },

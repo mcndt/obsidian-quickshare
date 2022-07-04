@@ -9,3 +9,4 @@ node_modules
 server/.env
 *.sqlite
 *.sqlite-journal
+*/**/coverage

@@ -29,7 +29,8 @@
 	let plaintext: string;
 	let timeString: string;
 	let decryptFailed = false;
-	let downloadUrl: string;
+	// let downloadUrl: string;
+	let downloadRef: HTMLAnchorElement;
 
 	onMount(() => {
 		if (browser) {
@@ -46,18 +47,22 @@
 		timeString = msToString(diff_ms);
 	}
 
-	$: if (plaintext) {
-		downloadUrl = getDownloadUrl(plaintext);
-	}
+	// $: if (plaintext) {
+	// 	downloadUrl = downloadMd(plaintext);
+	// }
 
 	// https://stackoverflow.com/questions/19327749/javascript-blob-filename-without-link
-	function getDownloadUrl(text: string): string {
+	function downloadMd() {
+		if (plaintext === undefined) return;
 		// Make sure the browser reads the data as UTF-8
 		// https://stackoverflow.com/questions/6672834/specifying-blob-encoding-in-google-chrome
 		const BOM = new Uint8Array([0xef, 0xbb, 0xbf]);
-		const blob = new Blob([BOM, text], { type: 'text/plain' });
+		const blob = new Blob([BOM, plaintext], { type: 'text/plain' });
 		const url = window.URL.createObjectURL(blob);
 		console.log(url);
+		downloadRef.href = url;
+		downloadRef.click();
+		window.URL.revokeObjectURL(blob);
 		return url;
 	}
 
@@ -86,10 +91,11 @@
 				<span class="h-5"><IconEncrypted /></span>
 				<span>e2e encrypted | <span>Shared {timeString} ago</span></span>
 			</span>
-			<a href={downloadUrl} class="flex gap-1.5 uppercase items-center">
+			<button on:click={downloadMd} class="flex gap-1.5 uppercase items-center hover:underline">
 				<span>Raw Markdown</span>
 				<span class="h-6"><LogoMarkdown /></span>
-			</a>
+				<a hidden bind:this={downloadRef} href="./">.</a>
+			</button>
 		</p>
 		<MarkdownRenderer {plaintext} />
 	</div>

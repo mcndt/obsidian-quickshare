@@ -57,6 +57,7 @@
 		const BOM = new Uint8Array([0xef, 0xbb, 0xbf]);
 		const blob = new Blob([BOM, text], { type: 'text/plain' });
 		const url = window.URL.createObjectURL(blob);
+		console.log(url);
 		return url;
 	}
 

@@ -44,7 +44,7 @@
 	});
 
 	$: if (note.insert_time) {
-		const diff_ms = new Date().valueOf() - note.insert_time.valueOf();
+		const diff_ms = new Date().valueOf() - new Date(note.insert_time).valueOf();
 		timeString = msToString(diff_ms);
 	}
 

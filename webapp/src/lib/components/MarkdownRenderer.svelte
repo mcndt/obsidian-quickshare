@@ -15,20 +15,30 @@
 	import ListItem from '$lib/marked/renderers/ListItem.svelte';
 
 	export let plaintext: string;
+	let ref: HTMLDivElement;
 
 	// @ts-ignore: typing mismatch
 	marked.use({ extensions: extensions });
 
 	const options = { ...marked.defaults, breaks: true };
+
+	function setTitle() {
+		const res = ref.querySelector('h1');
+		if (res) {
+			document.title = res.innerText;
+		}
+	}
 </script>
 
 <div
+	bind:this={ref}
 	id="md-box"
 	class="prose prose-zinc dark:prose-invert max-w-none prose-li:my-0 prose-ul:mt-0 prose-ol:mt-0 leading-7
 prose-strong:font-bold prose-a:font-normal prose-blockquote:font-normal prose-blockquote:not-italic
 prose-blockquote:first:before:content-[''] prose-hr:transition-colors"
 >
 	<SvelteMarkdown
+		on:parsed={setTitle}
 		renderers={{
 			heading: Heading,
 			list: List,

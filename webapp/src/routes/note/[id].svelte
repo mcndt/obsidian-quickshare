@@ -70,6 +70,13 @@
 	}
 </script>
 
+<svelte:head>
+	<title>{import.meta.env.VITE_BRANDING} | Shared note</title>
+	{#if decryptFailed}
+		<title>{import.meta.env.VITE_BRANDING} | Error decrypting note</title>
+	{/if}
+</svelte:head>
+
 {#if plaintext}
 	<div class="max-w-2xl mx-auto">
 		<p class="mb-4 text-sm flex justify-between text-zinc-500 dark:text-zinc-400">

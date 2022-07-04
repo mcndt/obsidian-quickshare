@@ -10,9 +10,11 @@
 
 	let content: HTMLElement;
 
+	$: console.log(content);
+
 	$: if (content) {
 		const titleElement = content.getElementsByTagName('p')[0];
-		const match = titleElement.innerText.split('\n')[0].match(/\[!(.+)\](\s([\w\s]+))?/);
+		const match = titleElement.innerText.split('\n')[0].match(/\[!(.+)\](?:\s(.+))?/);
 		if (match) {
 			type = match[1]?.trim();
 			title = match[2]?.trim() ?? type[0].toUpperCase() + type.substring(1).toLowerCase();
@@ -37,10 +39,10 @@
 	class="border-l-4 border-l-callout bg-zinc-100 dark:bg-zinc-800 my-4"
 >
 	<div class="p-[10px] bg-callout-bg flex items-center gap-2">
-		<span class="font-bold text-md text-callout h-5"><CalloutIcon {icon} /></span>
-		<span class="font-bold text-md">{title}</span>
+		<span class="callout-icon font-bold text-md text-callout h-5"><CalloutIcon {icon} /></span>
+		<span class="callout-title font-bold text-md">{title}</span>
 	</div>
-	<div bind:this={content} class="prose-p:my-0 prose-p:mx-0 py-4 px-3">
+	<div bind:this={content} class="callout-content prose-p:my-0 prose-p:mx-0 py-4 px-3">
 		<slot />
 	</div>
 </div>

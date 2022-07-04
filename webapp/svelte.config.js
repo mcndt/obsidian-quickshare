@@ -15,7 +15,9 @@ const config = {
 		adapter: adapter(),
 		vite: {
 			test: {
-				environment: 'happy-dom'
+				globals: true,
+				environment: 'happy-dom',
+				setupFiles: ['setupTest.js']
 			}
 		}
 	}

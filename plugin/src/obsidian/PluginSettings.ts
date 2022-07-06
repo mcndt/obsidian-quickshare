@@ -1,7 +1,9 @@
 export interface PluginSettings {
 	serverUrl: string;
+	selfHosted: boolean;
 }
 
 export const DEFAULT_SETTINGS: PluginSettings = {
-	serverUrl: "http://localhost:8080",
+	serverUrl: "https://noteshare.space",
+	selfHosted: false,
 };

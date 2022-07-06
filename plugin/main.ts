@@ -13,10 +13,8 @@ import { SharedNoteSuccessModal } from "src/ui/SharedNoteSuccessModal";
 import type { EventRef } from "obsidian";
 import type { PluginSettings } from "src/obsidian/PluginSettings";
 
-// Remember to rename these classes and interfaces!
-
 export default class NoteSharingPlugin extends Plugin {
-	private settings: PluginSettings;
+	public settings: PluginSettings;
 	private noteSharingService: NoteSharingService;
 	private eventRef: EventRef;
 

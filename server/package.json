@@ -7,17 +7,19 @@
     "test": "echo 'No tests set up for the server.'",
     "coverage": "echo 'No coverage set up for the server.'",
     "build": "npx tsc",
-    "dev": "npx nodemon ./server.ts"
+    "dev": "npx nodemon ./server.ts | npx pino-pretty"
   },
   "author": "Maxime Cannoodt (mcndt)",
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "^4.0.0",
-    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-rate-limit": "^6.4.0",
     "helmet": "^5.1.0",
+    "pino": "^8.1.0",
+    "pino-http": "^8.1.1",
+    "pino-pretty": "^8.1.0",
     "sqlite3": "^5.0.8"
   },
   "devDependencies": {

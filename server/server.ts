@@ -1,16 +1,25 @@
 import "dotenv/config";
 import express, { Express, Request } from "express";
-import cors from "cors";
 import { PrismaClient, EncryptedNote } from "@prisma/client";
 import { addDays } from "./util";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import pinoHttp from "pino-http";
+import logger from "./logger";
 
 // Initialize middleware clients
 const prisma = new PrismaClient();
-
 const app: Express = express();
 app.use(express.json());
+
+// configure logging
+app.use(
+  pinoHttp({
+    logger: logger,
+  })
+);
+
+// configure Helmet and CORS
 app.use(
   helmet({
     crossOriginResourcePolicy: {
@@ -29,7 +38,7 @@ const postLimiter = rateLimit({
 
 // start the Express server
 app.listen(process.env.PORT, () => {
-  console.log(`server started at port ${process.env.PORT}`);
+  logger.info(`server started at port ${process.env.PORT}`);
 });
 
 // Post new encrypted note
@@ -78,7 +87,7 @@ const interval =
   1000;
 setInterval(async () => {
   try {
-    console.log("[Cleanup] Cleaning up expired notes...");
+    logger.info("[Cleanup] Cleaning up expired notes...");
     const deleted = await prisma.encryptedNote.deleteMany({
       where: {
         expire_time: {
@@ -86,9 +95,9 @@ setInterval(async () => {
         },
       },
     });
-    console.log(`[Cleanup] Deleted ${deleted.count} expired notes.`);
+    logger.info(`[Cleanup] Deleted ${deleted.count} expired notes.`);
   } catch (err) {
-    console.error(`[Cleanup] Error cleaning expired notes:`);
-    console.error(err);
+    logger.error(`[Cleanup] Error cleaning expired notes:`);
+    logger.error(err);
   }
 }, interval);

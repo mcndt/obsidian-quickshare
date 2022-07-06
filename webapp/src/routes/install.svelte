@@ -2,14 +2,8 @@
 	<title>Get the plugin | {import.meta.env.VITE_BRANDING}</title>
 </svelte:head>
 
-<div class="prose dark:prose-invert">
-	<h2>Installing the plugin</h2>
+<div class="p-8 prose max-w-3xl dark:prose-invert">
+	<h1>Installing the plugin</h1>
 
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-		laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-		voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-		non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-	</p>
+	<p>Coming soon</p>
 </div>

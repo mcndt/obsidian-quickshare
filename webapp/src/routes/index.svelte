@@ -56,8 +56,8 @@
 				<h2 slot="title">Zero configuration</h2>
 				<p slot="text">
 					Other plugins require integration with GitHub Gist or Notion using your API keys.
-					Noteshare.space is a <strong>dedicated service</strong> for sharing your Markdown notes. No
-					account is needed to use our service.
+					Noteshare.space is a <strong class="whitespace-nowrap">dedicated service</strong> for sharing
+					your Markdown notes. No account is needed to use our service.
 				</p>
 			</Tile>
 			<img src="/zeroconfig.svg" alt="encrypted-art" class="w-80" />
@@ -68,9 +68,10 @@
 				<h2 slot="title">Open source</h2>
 				<p slot="text">
 					Want to verify the security of the encryption mechanism? Or host your own instance?
-					Noteshare.space is completely <a
-						class="underline"
-						href="https://github.com/mcndt/obsidian-note-sharing">open-source</a
+					Noteshare.space is completely <strong class="whitespace-nowrap"
+						><a class="underline" href="https://github.com/mcndt/obsidian-note-sharing"
+							>open-source</a
+						></strong
 					> under the MIT license.
 				</p>
 			</Tile>

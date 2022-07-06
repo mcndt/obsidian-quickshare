@@ -42,8 +42,10 @@
 			<Tile>
 				<h2 slot="title">End-to-end encrypted</h2>
 				<p slot="text">
-					Your notes are stored securely using strong <strong>AES256-CBC encryption</strong>. The
-					decryption key is never sent to the server, so not even the server can open your notes.
+					Your notes are stored securely using strong <strong class="whitespace-nowrap"
+						>AES-256-CBC encryption</strong
+					>. The decryption key is never sent to the server, so not even the server can open your
+					notes.
 				</p>
 			</Tile>
 			<img src="/encrypted.svg" alt="encrypted-art" class="w-80" />

@@ -45,41 +45,37 @@ app.listen(process.env.PORT, () => {
 app.post(
   "/api/note/",
   postLimiter,
-  async (req: Request<{}, {}, EncryptedNote>, res) => {
+  (req: Request<{}, {}, EncryptedNote>, res, next) => {
     const note = req.body;
-    const savedNote = await prisma.encryptedNote.create({
-      data: { ...note, expire_time: addDays(new Date(), 30) },
-    });
-    res.json({
-      view_url: `${process.env.FRONTEND_URL}/note/${savedNote.id}`,
-      expire_time: savedNote.expire_time,
-    });
+    prisma.encryptedNote
+      .create({
+        data: { ...note, expire_time: addDays(new Date(), 30) },
+      })
+      .then((savedNote) => {
+        res.json({
+          view_url: `${process.env.FRONTEND_URL}/note/${savedNote.id}`,
+          expire_time: savedNote.expire_time,
+        });
+      })
+      .catch(next);
   }
 );
 
 // Get encrypted note
-app.get("/api/note/:id", async (req, res) => {
-  const note = await prisma.encryptedNote.findUnique({
-    where: { id: req.params.id },
-  });
-  if (note != null) {
-    res.send(note);
-    console.log(`[GET] Retrieved note <${note.id}> for <${req.ip}>`);
-  }
-  res.status(404).send();
+app.get("/api/note/:id", (req, res, next) => {
+  prisma.encryptedNote
+    .findUnique({
+      where: { id: req.params.id },
+    })
+    .then((note) => {
+      if (note != null) {
+        res.send(note);
+        console.log(`[GET] Retrieved note <${note.id}> for <${req.ip}>`);
+      }
+      res.status(404).send();
+    })
+    .catch(next);
 });
-
-// Default response for any other request
-app.use((req, res, next) => {
-  console.log(`Route not found: ${req.path}`);
-  res.status(404).send("Route not found");
-});
-
-// // Error handling
-// app.use((err, req, res, next) => {
-//   console.error(err.stack);
-//   res.status(500).send("Something broke!");
-// });
 
 // Clean up expired notes periodically
 const interval =

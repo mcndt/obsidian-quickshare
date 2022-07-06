@@ -39,6 +39,7 @@ services:
       - CLEANUP_INTERVAL_SECONDS=600
       - POST_LIMIT_WINDOW_SECONDS=86400
       - POST_LIMIT=50
+      - NODE_ENV=production
     depends_on:
       migrate:
         condition: service_completed_successfully

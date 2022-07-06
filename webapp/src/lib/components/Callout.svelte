@@ -10,8 +10,6 @@
 
 	let content: HTMLElement;
 
-	$: console.log(content);
-
 	$: if (content) {
 		const titleElement = content.getElementsByTagName('p')[0];
 		const match = titleElement.innerText.split('\n')[0].match(/\[!(.+)\](?:\s(.+))?/);

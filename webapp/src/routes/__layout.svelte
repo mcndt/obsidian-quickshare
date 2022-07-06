@@ -15,7 +15,6 @@
 
 	$: {
 		if (browser) {
-			console.log('saving dark mode');
 			window.localStorage.setItem('isDarkMode', String(dark));
 		}
 	}

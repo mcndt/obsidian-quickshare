@@ -7,9 +7,11 @@
 		Built with love by <a class="underline" href="https://mcndt.dev" alt="blog">mcndt</a>
 	</span>
 	<span>-</span>
-	<a class="link" href="/about">About</a>
+	<a class="underline" href="/about">About</a>
 	<span>-</span>
-	<a class="link" href="https://mcndt.dev/about/">Contact</a>
+	<a class="underline" href="/contact">Contact</a>
 	<span>-</span>
-	<a class="link" href="https://www.buymeacoffee.com/mcndt">☕ Buy me a coffee</a>
+	<a class="underline" href="https://github.com/mcndt/obsidian-note-sharing/issues">Report bug</a>
+	<span>-</span>
+	<a class="underline" href="https://www.buymeacoffee.com/mcndt">☕ Buy me a coffee</a>
 </footer>

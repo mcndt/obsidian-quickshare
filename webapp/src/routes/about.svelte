@@ -25,7 +25,7 @@
 		</li>
 		<li>
 			The encrypted note is sent to the server for storage. The decryption key never leaves your
-			device.
+			device. The server will store your note for 31 days.
 		</li>
 		<li>
 			The decryption key is added to the share link using a hash symbol: <code

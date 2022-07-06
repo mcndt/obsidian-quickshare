@@ -20,7 +20,7 @@
 
 <dfn class="not-italic" title="Internal link">
 	<span class="underline cursor-not-allowed inline-flex items-center">
-		<span class="text-[#705dcf] opacity-50">
+		<span class="internal-link text-[#705dcf] opacity-50">
 			{#if useSlot}
 				<slot />
 			{:else}

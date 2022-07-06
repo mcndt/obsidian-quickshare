@@ -39,7 +39,7 @@
 			<div class="top-0 left-0 right-0">
 				<NavBar>
 					<svelte:fragment slot="left">
-						<NavBarLink href="/about">About</NavBarLink>
+						<NavBarLink href="/about">How it works</NavBarLink>
 						<NavBarLink href="/install">Get plugin</NavBarLink>
 					</svelte:fragment>
 					<svelte:fragment slot="right">

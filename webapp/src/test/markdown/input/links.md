@@ -12,9 +12,9 @@
 ## Internal links (classic style)
 
 - [Classic internal link (URL encoded)](internal%20page)
-- [Classic internal link (tag format)](<Slides Demo>)
+- [Classic internal link (tag format)](<Internal Page>)
 
 ## External links
 
-- [Wikipedia](http://www.wikipedia.org) (link to the internet)
-- [Wikipedia](https://www.wikipedia.org) (link to the secure internet)
+- [Wikipedia (http)](http://www.wikipedia.org) (link to the internet)
+- [Wikipedia (https)](https://www.wikipedia.org) (link to the secure internet)

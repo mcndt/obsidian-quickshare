@@ -1,9 +1,6 @@
-import { readFile } from 'fs/promises';
-import { join } from 'path';
 import { render, screen } from '@testing-library/svelte';
-import MarkdownRenderer from './MarkdownRenderer.svelte';
-
-const TEST_FILES_DIR = 'test/markdown/';
+import { readMd } from './util';
+import MarkdownRenderer from '$lib/components/MarkdownRenderer.svelte';
 
 // rendering links
 describe('rendering [[internal]] links', async () => {
@@ -45,35 +42,3 @@ describe('rendering [[internal]] links', async () => {
 		expect(textEl).toBeInTheDocument();
 	});
 });
-
-describe('rendering [md style](links)', async () => {
-	const plaintext = await readMd('links.md');
-
-	it('Renders URL-encoded internal links correctly', async () => {
-		render(MarkdownRenderer, { plaintext: plaintext });
-		const linkEl = await screen.findByText(/^Classic internal link (URL encoded)$/);
-		expect(linkEl).toBeInTheDocument();
-	});
-});
-
-describe('Rendering callouts', async () => {
-	const plaintext = await readMd('callout.md');
-
-	it('Renders callout title correctly ', async () => {
-		render(MarkdownRenderer, { plaintext: plaintext });
-		const titleEl = await screen.findByText('Don!t forget to account for non-letters! //fsd \\n');
-		expect(titleEl).toBeInTheDocument();
-		expect(titleEl).toHaveClass('callout-title');
-	});
-
-	it('Renders callout content correctly ', async () => {
-		render(MarkdownRenderer, { plaintext: plaintext });
-		const contentEl = await screen.findByText('Sample text.');
-		expect(contentEl).toBeInTheDocument();
-		expect(contentEl.parentElement).toHaveClass('callout-content');
-	});
-});
-
-async function readMd(file: string) {
-	return await readFile(join(TEST_FILES_DIR, file), { encoding: 'utf8' });
-}

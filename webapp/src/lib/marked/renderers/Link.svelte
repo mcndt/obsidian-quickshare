@@ -1,12 +1,23 @@
 <script lang="ts">
+	import LinkIcon from 'svelte-icons/md/MdOpenInNew.svelte';
+	import InternalLink from './InternalLink.svelte';
+
 	export let href = '';
 	export let title: string;
-	import LinkIcon from 'svelte-icons/md/MdOpenInNew.svelte';
+	let isWebLink = true;
+
+	$: if (href) {
+		if (!href.match(/^http[s]?:\/\//)) {
+			isWebLink = false;
+		}
+	}
 </script>
 
-<!-- <a {href} {title}><slot /></a> -->
-
-<span class="underline cursor-not-allowed inline-flex items-center font-normal">
-	<a {href} {title} class="text-[#705dcf]"><slot /></a>
-	<span class="h-3 mb-2 text-zinc-400 ml-0.5"><LinkIcon /></span>
-</span>
+{#if isWebLink}
+	<span class="underline cursor-not-allowed inline-flex items-center font-normal">
+		<a {href} {title} class="text-[#705dcf]"><slot /></a>
+		<span class="h-3 mb-2 text-zinc-400 ml-0.5"><LinkIcon /></span>
+	</span>
+{:else}
+	<InternalLink useSlot><slot /></InternalLink>
+{/if}

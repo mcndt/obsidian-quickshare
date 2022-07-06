@@ -7,7 +7,7 @@
     "test": "echo 'No tests set up for the server.'",
     "coverage": "echo 'No coverage set up for the server.'",
     "build": "npx tsc",
-    "dev": "npx nodemon ./server.ts | npx pino-pretty"
+    "dev": "npx nodemon ./server.ts | npx pino-colada"
   },
   "author": "Maxime Cannoodt (mcndt)",
   "license": "MIT",
@@ -19,7 +19,6 @@
     "helmet": "^5.1.0",
     "pino": "^8.1.0",
     "pino-http": "^8.1.1",
-    "pino-pretty": "^8.1.0",
     "sqlite3": "^5.0.8"
   },
   "devDependencies": {
@@ -28,6 +27,7 @@
     "@types/node": "^18.0.0",
     "@types/sqlite3": "^3.1.8",
     "nodemon": "^2.0.18",
+    "pino-colada": "^2.2.2",
     "prisma": "^4.0.0",
     "supertest": "^6.2.3",
     "ts-node": "^10.8.1",

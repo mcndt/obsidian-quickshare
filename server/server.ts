@@ -70,7 +70,6 @@ app.get("/api/note/:id", (req, res, next) => {
     .then((note) => {
       if (note != null) {
         res.send(note);
-        console.log(`[GET] Retrieved note <${note.id}> for <${req.ip}>`);
       }
       res.status(404).send();
     })

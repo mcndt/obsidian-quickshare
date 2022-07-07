@@ -19,10 +19,10 @@
 
 <article class="mx-auto max-w-4xl text-zinc-900 dark:text-zinc-100">
 	<div class="space-y-6 pt-24 pb-32">
-		<h1 id="title" class="font-extrabold text-5xl text-center">
+		<h1 id="title" class="font-extrabold text-4xl md:text-5xl text-center">
 			Securely share your <span class="text-[#705dcf]">Obsidian</span> notes with one click.
 		</h1>
-		<p id="tagline" class="prose-2xl text-center text-zinc-700 dark:text-zinc-300">
+		<p id="tagline" class="prose-xl md:prose-2xl text-center text-zinc-700 dark:text-zinc-300">
 			Zero configuration. End-to-end encrypted. <br />No account needed.
 		</p>
 		<p id="install-button" class="text-center pt-2">
@@ -37,7 +37,7 @@
 
 	<hr class="border-zinc-200 dark:border-zinc-700 transition-colors" />
 
-	<div class="space-y-8 pt-24 pb-16">
+	<div class="space-y-8 pt-12 md:pt-24 md:pb-16">
 		<div class="flex flex-row gap-4 mx-auto justify-center">
 			<Tile>
 				<h2 slot="title">End-to-end encrypted</h2>
@@ -48,7 +48,7 @@
 					notes.
 				</p>
 			</Tile>
-			<img src="/encrypted.svg" alt="encrypted-art" class="w-80" />
+			<img src="/encrypted.svg" alt="encrypted-art" class="w-80 hidden md:block" />
 		</div>
 
 		<div class="flex flex-row gap-4 mx-auto justify-center flex-row-reverse">
@@ -60,7 +60,7 @@
 					your Markdown notes. No account is needed to use our service.
 				</p>
 			</Tile>
-			<img src="/zeroconfig.svg" alt="encrypted-art" class="w-80" />
+			<img src="/zeroconfig.svg" alt="encrypted-art" class="w-80 hidden md:block" />
 		</div>
 
 		<div class="flex flex-row gap-4 mx-auto justify-center">
@@ -75,7 +75,7 @@
 					> under the MIT license.
 				</p>
 			</Tile>
-			<img src="/opensource.svg" alt="encrypted-art" class="w-80" />
+			<img src="/opensource.svg" alt="encrypted-art" class="w-80 hidden md:block" />
 		</div>
 	</div>
 </article>

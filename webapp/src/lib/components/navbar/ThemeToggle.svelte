@@ -11,7 +11,7 @@
 
 <button
 	on:click={onClick}
-	class="self-center w-full h-full text-zinc-600 dark:text-zinc-400 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 p-1.5"
+	class="py-4 px-2 md:py-0 md:px-0 self-center w-full h-full text-zinc-600 dark:text-zinc-400 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 p-1.5"
 >
 	<div class="h-full flex flex-col justify-center">
 		<span class="h-6 text-black dark:text-zinc-300">

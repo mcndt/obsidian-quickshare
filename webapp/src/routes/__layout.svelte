@@ -46,8 +46,14 @@
 							><span class="text-[#705dcf] font-bold">Get Obsidian</span></NavBarLink
 						>
 						<NavBarLink href="https://github.com/mcndt/obsidian-note-sharing">
-							<span class="h-6 text-black dark:text-zinc-300"><LogoGithub /></span>
+							<span class="flex justify-center gap-2 items-center">
+								<span class="text-black dark:text-zinc-200 md:hidden">GitHub</span>
+								<span class="h-6 text-black dark:text-zinc-200 md:dark:text-zinc-300"
+									><LogoGithub /></span
+								>
+							</span>
 						</NavBarLink>
+
 						<ThemeToggle bind:dark />
 					</svelte:fragment>
 					></NavBar

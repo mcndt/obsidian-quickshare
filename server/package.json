@@ -7,10 +7,10 @@
     "test-watch": "vitest",
     "test": "vitest run unit",
     "test:unit": "vitest run unit",
-    "test:integration": "run-s db:test:migrate test:integration:test db:test:cleanup",
+    "test:integration": "run-s db:test:cleanup db:test:migrate test:integration:test",
     "test:integration:test": "dotenv -e .env.test -- vitest run --coverage --no-threads",
     "db:test:migrate": "dotenv -e .env.test -- npx prisma db push",
-    "db:test:cleanup": "rm ./prisma/test.sqlite",
+    "db:test:cleanup": "rm -f ./prisma/test.sqlite",
     "coverage": "vitest run --coverage",
     "build": "npx tsc",
     "dev": "npx nodemon ./server.ts | npx pino-colada"

@@ -1,13 +1,7 @@
-import { createWriteStream } from "fs";
-import pino, { multistream } from "pino";
+import pino from "pino";
 
-// const streams = [
-//   { stream: process.stdout },
-//   { stream: createWriteStream("/logs/logfile.log", { flags: "a" }) },
-// ];
-
-// export default pino({}, multistream(streams));
-
+/* c8 ignore start */
 export default pino({
   level: process.env.LOG_LEVEL || "info",
 });
+/* c8 ignore stop */

@@ -71,6 +71,11 @@ app.get("/api/note/:id", (req, res, next) => {
     .catch(next);
 });
 
+// For testing purposes
+app.get("/api/test", (req, res, next) => {
+  res.status(200).send("Hello world!");
+});
+
 // Clean up expired notes periodically
 const interval =
   Math.max(parseInt(<string>process.env.CLEANUP_INTERVAL_SECONDS) || 1, 1) *

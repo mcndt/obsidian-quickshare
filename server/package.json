@@ -27,6 +27,7 @@
     "@types/express": "^4.17.13",
     "@types/node": "^18.0.0",
     "@types/sqlite3": "^3.1.8",
+    "@types/supertest": "^2.0.12",
     "nodemon": "^2.0.18",
     "pino-colada": "^2.2.2",
     "prisma": "^4.0.0",

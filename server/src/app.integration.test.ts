@@ -1,19 +1,17 @@
 import app from "./app";
 import request from "supertest";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import prisma from "./client";
+import logger from "./logger";
 
 const testNote = {
   ciphertext: "sample_ciphertext",
   hmac: "sample_hmac",
 };
 
-describe("GET /api/test", () => {
-  it('should respond "Hello world!"', async () => {
-    const res = await request(app).get("/api/test");
-    expect(res.statusCode).toBe(200);
-    expect(res.text).toBe("Hello world!");
-  });
+beforeAll(() => {
+  // logger.level = "error";
+  logger.silent();
 });
 
 describe("GET /api/note", () => {
@@ -91,5 +89,18 @@ describe("POST /api/note", () => {
     expect(res.body.id).toEqual(note_id);
     expect(res.body.ciphertext).toEqual(testNote.ciphertext);
     expect(res.body.hmac).toEqual(testNote.hmac);
+  });
+
+  it("Applies rate limits to endpoint", async () => {
+    // make more requests than the post limit set in .env.test
+    const requests = [];
+    for (let i = 0; i < 51; i++) {
+      requests.push(request(app).post("/api/note").send(testNote));
+    }
+    const responses = await Promise.all(requests);
+    const responseCodes = responses.map((res) => res.statusCode);
+
+    // at least one response should be 429
+    expect(responseCodes).toContain(429);
   });
 });

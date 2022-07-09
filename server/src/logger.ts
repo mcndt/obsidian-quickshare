@@ -8,4 +8,6 @@ import pino, { multistream } from "pino";
 
 // export default pino({}, multistream(streams));
 
-export default pino({});
+export default pino({
+  level: process.env.LOG_LEVEL || "info",
+});

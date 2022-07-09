@@ -1,14 +1,14 @@
 import "dotenv/config";
 import express, { Express, Request } from "express";
-import { PrismaClient, EncryptedNote } from "@prisma/client";
+import { EncryptedNote } from "@prisma/client";
 import { addDays } from "./util";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import pinoHttp from "pino-http";
 import logger from "./logger";
+import prisma from "./client";
 
 // Initialize middleware clients
-const prisma = new PrismaClient();
 const app: Express = express();
 app.use(express.json());
 

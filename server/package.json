@@ -5,10 +5,10 @@
   "main": "server.js",
   "scripts": {
     "test-watch": "vitest",
-    "test": "vitest run",
+    "test": "vitest run unit",
     "test:unit": "vitest run unit",
     "test:integration": "run-s db:test:migrate test:integration:test db:test:cleanup",
-    "test:integration:test": "dotenv -e .env.test -- vitest run integration --coverage --no-threads",
+    "test:integration:test": "dotenv -e .env.test -- vitest run --coverage --no-threads",
     "db:test:migrate": "dotenv -e .env.test -- npx prisma db push",
     "db:test:cleanup": "rm ./prisma/test.sqlite",
     "coverage": "vitest run --coverage",

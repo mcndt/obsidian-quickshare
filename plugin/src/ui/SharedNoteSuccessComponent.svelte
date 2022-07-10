@@ -1,6 +1,5 @@
 <script lang="ts">
 	import moment, { type Moment } from "moment";
-	import { now } from "svelte/internal";
 
 	export let url: string;
 	export let expireTime: Moment;
@@ -17,6 +16,10 @@
 			buttonText = "copy";
 		}, 1500);
 	}
+
+	function onOpen() {
+		window.open(url, "_blank");
+	}
 </script>
 
 <div class="share-plugin-modal-container">
@@ -27,9 +30,14 @@
 	<div id="url">
 		<input disabled id="url-input" type="text" bind:value={url} />
 		<button
-			id="url-copy-button"
+			class="url-button"
 			aria-label="Copy link to clipboard"
 			on:click={onCopy}>{buttonText}</button
+		>
+		<button
+			class="url-button"
+			aria-label="Copy link to clipboard"
+			on:click={onOpen}>Open</button
 		>
 	</div>
 	<p id="subtext">
@@ -62,9 +70,9 @@
 		cursor: pointer !important;
 	}
 
-	#url-copy-button {
+	.url-button {
 		margin: 0px;
-		width: 6em;
+		width: 5em;
 	}
 
 	#subtext {

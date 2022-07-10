@@ -1,7 +1,7 @@
 import type NoteSharingPlugin from "main";
 import { Modal } from "obsidian";
-import Component from "./SharedNoteSuccessComponent.svelte";
 import type { Moment } from "moment";
+import Component from "./SharedNoteSuccessComponent.svelte";
 
 export class SharedNoteSuccessModal extends Modal {
 	private url: string;

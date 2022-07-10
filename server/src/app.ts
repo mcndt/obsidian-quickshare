@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express, { Express, Request } from "express";
+import express, { Express, Request, Response } from "express";
 import { EncryptedNote } from "@prisma/client";
 import { addDays } from "./util";
 import helmet from "helmet";
@@ -8,6 +8,8 @@ import pinoHttp from "pino-http";
 import logger from "./logger";
 import prisma from "./client";
 import bodyParser from "body-parser";
+import { NotePostRequest } from "./model/NotePostRequest";
+import { validateOrReject } from "class-validator";
 
 // Initialize middleware clients
 const app: Express = express();
@@ -48,7 +50,7 @@ const getLimiter = rateLimit({
 app.use(bodyParser.json({ limit: "400k" }));
 
 // Get encrypted note
-app.get("/api/note/:id", getLimiter, (req, res, next) => {
+app.get("/api/note/:id", getLimiter, (req: Request, res: Response, next) => {
   prisma.encryptedNote
     .findUnique({
       where: { id: req.params.id },
@@ -63,24 +65,28 @@ app.get("/api/note/:id", getLimiter, (req, res, next) => {
 });
 
 // Post new encrypted note
-app.post(
-  "/api/note/",
-  postLimiter,
-  (req: Request<{}, {}, EncryptedNote>, res, next) => {
-    const note = req.body;
-    prisma.encryptedNote
-      .create({
-        data: { ...note, expire_time: addDays(new Date(), 30) },
-      })
-      .then((savedNote) => {
-        res.json({
-          view_url: `${process.env.FRONTEND_URL}/note/${savedNote.id}`,
-          expire_time: savedNote.expire_time,
-        });
-      })
-      .catch(next);
-  }
-);
+app.post("/api/note/", postLimiter, (req: Request, res: Response, next) => {
+  const notePostRequest = new NotePostRequest();
+  Object.assign(notePostRequest, req.body);
+  validateOrReject(notePostRequest).catch((err) => {
+    res.status(400).send(err.message);
+  });
+  const note = notePostRequest as EncryptedNote;
+  prisma.encryptedNote
+    .create({
+      data: {
+        ...note,
+        expire_time: addDays(new Date(), 30),
+      },
+    })
+    .then((savedNote) => {
+      res.json({
+        view_url: `${process.env.FRONTEND_URL}/note/${savedNote.id}`,
+        expire_time: savedNote.expire_time,
+      });
+    })
+    .catch(next);
+});
 
 // For testing purposes
 app.get("/api/test", (req, res, next) => {

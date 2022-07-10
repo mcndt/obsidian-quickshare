@@ -3,9 +3,10 @@ import request from "supertest";
 import { describe, it, expect } from "vitest";
 import prisma from "./client";
 
+// const testNote with base64 ciphertext and hmac
 const testNote = {
-  ciphertext: "sample_ciphertext",
-  hmac: "sample_hmac",
+  ciphertext: Buffer.from("sample_ciphertext").toString("base64"),
+  hmac: Buffer.from("sample_hmac").toString("base64"),
 };
 
 describe("GET /api/note", () => {
@@ -76,6 +77,11 @@ describe("POST /api/note", () => {
     expect(new Date(res.body.expire_time).getTime()).toBeGreaterThan(
       new Date().getTime()
     );
+  });
+
+  it("Returns a bad request on invalid POST body", async () => {
+    const res = await request(app).post("/api/note").send({});
+    expect(res.statusCode).toBe(400);
   });
 
   it("returns a valid view_url on correct POST body", async () => {

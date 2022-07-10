@@ -1,4 +1,4 @@
-import app from "./app";
+import app, { cleanExpiredNotes } from "./app";
 import request from "supertest";
 import { describe, it, expect } from "vitest";
 import prisma from "./client";
@@ -134,5 +134,29 @@ describe("POST /api/note", () => {
 
     // sleep for 100 ms to allow rate limiter to reset
     await new Promise((resolve) => setTimeout(resolve, 100));
+  });
+});
+
+describe("Clean expired notes", () => {
+  it("removes expired notes", async () => {
+    // insert a note with expiry date in the past using prisma
+    const { id } = await prisma.encryptedNote.create({
+      data: {
+        ...testNote,
+        expire_time: new Date(0),
+      },
+    });
+
+    // make request for note and check that response is 200
+    let res = await request(app).get(`/api/note/${id}`);
+    expect(res.statusCode).toBe(200);
+
+    // run cleanup
+    const nDeleted = await cleanExpiredNotes();
+    expect(nDeleted).toBeGreaterThan(0);
+
+    // make sure note is gone
+    res = await request(app).get(`/api/note/${id}`);
+    expect(res.statusCode).toBe(404);
   });
 });

@@ -1,18 +1,12 @@
 import app from "./app";
 import request from "supertest";
-import { describe, it, expect, beforeAll } from "vitest";
+import { describe, it, expect } from "vitest";
 import prisma from "./client";
-import logger from "./logger";
 
 const testNote = {
   ciphertext: "sample_ciphertext",
   hmac: "sample_hmac",
 };
-
-beforeAll(() => {
-  // logger.level = "error";
-  logger.silent();
-});
 
 describe("GET /api/note", () => {
   it("returns a note for valid ID", async () => {

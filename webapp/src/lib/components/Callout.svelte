@@ -37,7 +37,9 @@
 	class="border-l-4 border-l-callout bg-zinc-100 dark:bg-zinc-800 my-4"
 >
 	<div class="p-[10px] bg-callout-bg flex items-center gap-2">
-		<span class="callout-icon font-bold text-md text-callout h-5"><CalloutIcon {icon} /></span>
+		<span class="callout-icon font-bold text-md text-callout h-5 w-5 inline-block"
+			><CalloutIcon {icon} /></span
+		>
 		<span class="callout-title font-bold text-md">{title}</span>
 	</div>
 	<div bind:this={content} class="callout-content prose-p:my-0 prose-p:mx-0 py-4 px-3">

@@ -83,7 +83,7 @@
 			class="mb-4 text-sm flex gap-2 flex-col md:gap-0 md:flex-row justify-between text-zinc-500 dark:text-zinc-400"
 		>
 			<span class="flex gap-1.5 items-center uppercase">
-				<span class="h-5"><IconEncrypted /></span>
+				<span class="inline-block w-5 h-5"><IconEncrypted /></span>
 				<span>e2e encrypted | <span>Shared {timeString} ago</span></span>
 			</span>
 			<button

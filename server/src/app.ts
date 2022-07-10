@@ -89,22 +89,25 @@ app.post("/api/note/", postLimiter, (req: Request, res: Response, next) => {
 });
 
 // Clean up expired notes periodically
-export async function cleanExpiredNotes(): Promise<number | undefined> {
-  try {
-    logger.info("[Cleanup] Cleaning up expired notes...");
-    const deleted = await prisma.encryptedNote.deleteMany({
+export async function cleanExpiredNotes(): Promise<number> {
+  logger.info("[Cleanup] Cleaning up expired notes...");
+  return prisma.encryptedNote
+    .deleteMany({
       where: {
         expire_time: {
           lte: new Date(),
         },
       },
+    })
+    .then((deleted) => {
+      logger.info(`[Cleanup] Deleted ${deleted.count} expired notes.`);
+      return deleted.count;
+    })
+    .catch((err) => {
+      logger.error(`[Cleanup] Error cleaning expired notes:`);
+      logger.error(err);
+      return -1;
     });
-    logger.info(`[Cleanup] Deleted ${deleted.count} expired notes.`);
-    return deleted.count;
-  } catch (err) {
-    logger.error(`[Cleanup] Error cleaning expired notes:`);
-    logger.error(err);
-  }
 }
 
 const interval =

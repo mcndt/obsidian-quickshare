@@ -91,11 +91,11 @@
 				class="flex flex-row-reverse justify-end md:flex-row underline md:no-underline gap-1.5 uppercase items-center hover:underline"
 			>
 				{#if showRaw}
-					<span class="h-6"><LogoDocument /> </span>
+					<span class="w-6 h-6 inline-block"><LogoDocument /> </span>
 					<span>Render Document</span>
 				{:else}
 					<span>Raw Markdown</span>
-					<span class="h-6"><LogoMarkdown /> </span>
+					<span class="w-6 h-6 inline-block"><LogoMarkdown /> </span>
 				{/if}
 			</button>
 		</p>

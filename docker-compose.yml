@@ -37,9 +37,13 @@ services:
       - DATABASE_URL=file:/database/db.sqlite
       - FRONTEND_URL=http://localhost:5000
       - CLEANUP_INTERVAL_SECONDS=600
+      - NODE_ENV=production
+      # Rate limit for uploading notes
       - POST_LIMIT_WINDOW_SECONDS=86400
       - POST_LIMIT=50
-      - NODE_ENV=production
+      # Rate limit for downloading notes
+      - GET_LIMIT_WINDOW_SECONDS=60
+      - GET_LIMIT=20
     depends_on:
       migrate:
         condition: service_completed_successfully

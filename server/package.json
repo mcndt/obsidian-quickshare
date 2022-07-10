@@ -7,8 +7,8 @@
     "test": "run-s test:db:reset test:test",
     "coverage": "run-s test:db:reset test:coverage",
     "test-watch": "dotenv -e .env.test -- vitest unit --coverage",
-    "test:test": "dotenv -e .env.test -- vitest run ",
-    "test:coverage": "dotenv -e .env.test -- vitest run --coverage",
+    "test:test": "dotenv -e .env.test -- vitest run --no-threads",
+    "test:coverage": "dotenv -e .env.test -- vitest run --no-threads --coverage",
     "test:db:reset": "dotenv -e .env.test -- npx prisma migrate reset -f",
     "build": "npx tsc",
     "dev": "npx nodemon ./server.ts | npx pino-colada"

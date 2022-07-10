@@ -31,14 +31,36 @@ app.use(
 
 // Apply rate limiting
 const postLimiter = rateLimit({
-  windowMs: parseInt(process.env.POST_LIMIT_WINDOW_SECONDS as string) * 1000,
+  windowMs: parseFloat(process.env.POST_LIMIT_WINDOW_SECONDS as string) * 1000,
   max: parseInt(process.env.POST_LIMIT as string), // Limit each IP to X requests per window
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+const getLimiter = rateLimit({
+  windowMs: parseFloat(process.env.GET_LIMIT_WINDOW_SECONDS as string) * 1000,
+  max: parseInt(process.env.GET_LIMIT as string), // Limit each IP to X requests per window
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
 // Apply 400kB upload limit on POST
 app.use(bodyParser.json({ limit: "400k" }));
+
+// Get encrypted note
+app.get("/api/note/:id", getLimiter, (req, res, next) => {
+  prisma.encryptedNote
+    .findUnique({
+      where: { id: req.params.id },
+    })
+    .then((note) => {
+      if (note != null) {
+        res.send(note);
+      }
+      res.status(404).send();
+    })
+    .catch(next);
+});
 
 // Post new encrypted note
 app.post(
@@ -59,21 +81,6 @@ app.post(
       .catch(next);
   }
 );
-
-// Get encrypted note
-app.get("/api/note/:id", (req, res, next) => {
-  prisma.encryptedNote
-    .findUnique({
-      where: { id: req.params.id },
-    })
-    .then((note) => {
-      if (note != null) {
-        res.send(note);
-      }
-      res.status(404).send();
-    })
-    .catch(next);
-});
 
 // For testing purposes
 app.get("/api/test", (req, res, next) => {

@@ -97,4 +97,13 @@ describe("POST /api/note", () => {
     // at least one response should be 429
     expect(responseCodes).toContain(429);
   });
+
+  it("Applies upload limit to endpoint of 400kb", async () => {
+    const largeNote = {
+      ciphertext: "a".repeat(400 * 1024),
+      hmac: "sample_hmac",
+    };
+    const res = await request(app).post("/api/note").send(largeNote);
+    expect(res.statusCode).toBe(413);
+  });
 });

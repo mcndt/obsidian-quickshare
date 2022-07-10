@@ -7,8 +7,8 @@
     "test": "run-s test:db:reset test:test",
     "coverage": "run-s test:db:reset test:coverage",
     "test-watch": "dotenv -e .env.test -- vitest unit --coverage",
-    "test:test": "dotenv -e .env.test -- vitest run --no-threads",
-    "test:coverage": "dotenv -e .env.test -- vitest run --no-threads --coverage",
+    "test:test": "dotenv -e .env.test -- vitest run ",
+    "test:coverage": "dotenv -e .env.test -- vitest run --coverage",
     "test:db:reset": "dotenv -e .env.test -- npx prisma migrate reset -f",
     "build": "npx tsc",
     "dev": "npx nodemon ./server.ts | npx pino-colada"
@@ -17,6 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "^4.0.0",
+    "body-parser": "^1.20.0",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-rate-limit": "^6.4.0",

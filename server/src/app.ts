@@ -7,6 +7,7 @@ import rateLimit from "express-rate-limit";
 import pinoHttp from "pino-http";
 import logger from "./logger";
 import prisma from "./client";
+import bodyParser from "body-parser";
 
 // Initialize middleware clients
 const app: Express = express();
@@ -35,6 +36,9 @@ const postLimiter = rateLimit({
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
+
+// Apply 400kB upload limit on POST
+app.use(bodyParser.json({ limit: "400k" }));
 
 // Post new encrypted note
 app.post(

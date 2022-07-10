@@ -79,12 +79,17 @@
 
 {#if plaintext}
 	<div class="max-w-2xl mx-auto">
-		<p class="mb-4 text-sm flex justify-between text-zinc-500 dark:text-zinc-400">
+		<p
+			class="mb-4 text-sm flex gap-2 flex-col md:gap-0 md:flex-row justify-between text-zinc-500 dark:text-zinc-400"
+		>
 			<span class="flex gap-1.5 items-center uppercase">
 				<span class="h-5"><IconEncrypted /></span>
 				<span>e2e encrypted | <span>Shared {timeString} ago</span></span>
 			</span>
-			<button on:click={toggleRaw} class="flex gap-1.5 uppercase items-center hover:underline">
+			<button
+				on:click={toggleRaw}
+				class="flex flex-row-reverse justify-end md:flex-row underline md:no-underline gap-1.5 uppercase items-center hover:underline"
+			>
 				{#if showRaw}
 					<span class="h-6"><LogoDocument /> </span>
 					<span>Render Document</span>

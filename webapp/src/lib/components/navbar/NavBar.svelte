@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-
-	import FaBars from 'svelte-icons/fa/FaBars.svelte';
 	import { slide } from 'svelte/transition';
+	import FaBars from 'svelte-icons/fa/FaBars.svelte';
 
 	export let showMobileMenu = false;
 
@@ -59,7 +58,7 @@
 		rounded-lg"
 	>
 		<div
-			class="bg-zinc-200 dark:bg-zinc-700 relative mt-2 mx-2 px-4 py-2 rounded-[20px] shadow-sm sm:shadow-lg"
+			class="bg-zinc-200 dark:bg-zinc-700 relative mt-2 mx-2 px-4 py-2 rounded-[20px] shadow-md sm:shadow-lg"
 		>
 			<div
 				on:click={() => (showMobileMenu = !showMobileMenu)}

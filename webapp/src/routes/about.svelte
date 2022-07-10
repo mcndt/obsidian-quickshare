@@ -2,7 +2,7 @@
 	<title>About | {import.meta.env.VITE_BRANDING}</title>
 </svelte:head>
 
-<div class="p-8 prose max-w-3xl dark:prose-invert">
+<div class="md:py-8 prose max-w-3xl dark:prose-invert">
 	<h1>About</h1>
 
 	<p>

@@ -1,7 +1,7 @@
 <hr class="border-zinc-200 dark:border-zinc-700 transition-colors" />
 
 <footer
-	class="p-8 text-center flex flex-wrap justify-center items-center gap-x-2 text-zinc-500 dark:text-zinc-500"
+	class="px-3 py-6 md:p-8 text-center flex flex-wrap justify-center items-center gap-x-2 text-zinc-500 dark:text-zinc-500"
 >
 	<span>
 		Built with love by <a class="underline" href="https://mcndt.dev" alt="blog">mcndt</a>

@@ -1,10 +1,10 @@
 {
-	"id": "obsidian-sample-plugin",
+	"id": "obsidian-note-sharing",
 	"name": "Obsidian Note Sharing",
-	"version": "1.0.1",
-	"minAppVersion": "0.12.0",
-	"description": "This is a sample plugin for Obsidian. This plugin demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
+	"version": "1.0.0",
+	"minAppVersion": "0.13.25",
+	"description": "Securely share your Obsidian notes with one click. Notes are end-to-end encrypted. No API keys or configuration required.",
+	"author": "Maxime Cannoodt (@mcndt)",
+	"authorUrl": "https://mcndt.dev",
 	"isDesktopOnly": false
 }

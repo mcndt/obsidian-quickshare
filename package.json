@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
-	"version": "1.0.1",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"name": "obsidian-note-sharing",
+	"version": "1.0.0",
+	"description": "Obsidian plugin for encrypting and uploading notes to noteshare.space.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
@@ -12,7 +12,7 @@
 		"version": "node version-bump.mjs && git add manifest.json versions.json"
 	},
 	"keywords": [],
-	"author": "",
+	"author": "Maxime Cannoodt (@mcndt)",
 	"license": "MIT",
 	"devDependencies": {
 		"@tsconfig/svelte": "^3.0.0",

@@ -6,7 +6,7 @@ on:
             - "*"
 
 env:
-    PLUGIN_NAME: obsidian-toggl-integration # Change this to match the id of your plugin.
+    PLUGIN_NAME: obsidian-note-sharing # Change this to match the id of your plugin.
 
 jobs:
     build:

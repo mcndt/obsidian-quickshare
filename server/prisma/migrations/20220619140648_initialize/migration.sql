@@ -1,7 +1,0 @@
--- CreateTable
-CREATE TABLE "EncryptedNote" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "insert_time" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "ciphertext" BLOB NOT NULL,
-    "hmac" BLOB NOT NULL
-);

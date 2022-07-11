@@ -4,7 +4,7 @@
 
 Host Obsidian notes over the internet using end-to-end encryption.
 
-![Explainer](img/explainer.png)
+![Explainer](img/explainer-img.png)
 ## Functionality
 
 - Secure note storage using AES-256-CBC encryption

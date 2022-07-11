@@ -72,7 +72,7 @@ export default class NoteSharingPlugin extends Plugin {
 		if (file instanceof TFile && file.extension === "md") {
 			menu.addItem((item) => {
 				item.setIcon("paper-plane-glyph");
-				item.setTitle("Share note");
+				item.setTitle("Create share link");
 				item.onClick(async (evt) => {
 					this.shareNote(await this.app.vault.read(file));
 				});

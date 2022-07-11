@@ -1,4 +1,4 @@
-[![GitHub tag (Latest by date)](https://img.shields.io/github/v/tag/mcndt/obsidian-toggl-integration)](https://github.com/mcndt/obsidian-note-sharing/releases) ![GitHub all releases](https://img.shields.io/github/downloads/mcndt/obsidian-note-sharing/total)
+[![GitHub tag (Latest by date)](https://img.shields.io/github/v/tag/mcndt/obsidian-note-sharing)](https://github.com/mcndt/obsidian-note-sharing/releases) ![GitHub all releases](https://img.shields.io/github/downloads/mcndt/obsidian-note-sharing/total)
 
 # Obsidian Note Sharing - Securely share your Obsidian notes with one click
 

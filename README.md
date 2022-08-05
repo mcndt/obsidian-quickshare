@@ -23,6 +23,12 @@ By default, notes are stored on my companion project, [Noteshare.space](https://
 
 Both the plugin and Noteshare.space are currently in beta. To beta test, you can install the plugin using BRAT (see [BRAT > Adding a beta plugin](https://github.com/TfTHacker/obsidian42-brat#adding-a-beta-plugin) for further instructions).
 
+## Feedback
+
+The preferred way to report bugs or request new features for the web app or the Obsidian plugin is via the [GitHub issues page](https://github.com/mcndt/obsidian-note-sharing/issues/new/choose).
+
+If you want a more interactive way to discuss bugs or features, you can join the [Discord server](https://discord.gg/y3HqyGeABK).
+
 ## Support
 If you like this plugin and want to support me, you can do so via [Buy me a Coffee](https://www.buymeacoffee.com/mcndt):
 

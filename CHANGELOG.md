@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.1]
+
+
+- bug: 🐛 Fix the server URL not resetting to `https://noteshare.space` when enabling the "Use Noteshare.space" option in the plugin settings.
+
 ## [0.1.0]
 
 ### First version! 

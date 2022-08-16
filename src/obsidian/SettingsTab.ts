@@ -20,12 +20,12 @@ export default class SettingsTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl("h2", { text: "Obsidian Note Sharing" });
+		containerEl.createEl("h2", { text: "QuickShare" });
 
 		new Setting(containerEl)
 			.setName("Use noteshare.space")
 			.setDesc(
-				"Noteshare.space is the official service for hosting your encrypted notes. Uncheck if you want to self-host."
+				"Noteshare.space is the free and official service for sharing your notes with QuickShare. Uncheck if you want to self-host."
 			)
 			.addToggle((text) =>
 				text
@@ -52,7 +52,9 @@ export default class SettingsTab extends PluginSettingTab {
 
 		new Setting(this.selfHostSettings)
 			.setName("Server URL")
-			.setDesc("Server URL hosting the encrypted notes.")
+			.setDesc(
+				"Server URL hosting the encrypted notes. For more information about self-hosting, see https://github.com/mcndt/noteshare.space#deployment"
+			)
 			.addText((text) => {
 				this.selfHostedUrl = text;
 				text.setPlaceholder("enter URL")

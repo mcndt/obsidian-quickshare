@@ -1,6 +1,6 @@
-[![GitHub tag (Latest by date)](https://img.shields.io/github/v/tag/mcndt/obsidian-note-sharing)](https://github.com/mcndt/obsidian-note-sharing/releases) ![GitHub all releases](https://img.shields.io/github/downloads/mcndt/obsidian-note-sharing/total)
+[![GitHub tag (Latest by date)](https://img.shields.io/github/v/tag/mcndt/obsidian-quickshare)](https://github.com/mcndt/obsidian-quickshare/releases) ![GitHub all releases](https://img.shields.io/github/downloads/mcndt/obsidian-quickshare/total)
 
-# Obsidian Note Sharing - Securely share your Obsidian notes with one click
+# Obsidian QuickShare - Securely share your Obsidian notes with one click
 
 Host Obsidian notes over the internet using end-to-end encryption. Requires zero configuration and no account.
 
@@ -25,7 +25,7 @@ Both the plugin and Noteshare.space are currently in beta. To beta test, you can
 
 ## Feedback
 
-The preferred way to report bugs or request new features for the web app or the Obsidian plugin is via the [GitHub issues page](https://github.com/mcndt/obsidian-note-sharing/issues/new/choose).
+The preferred way to report bugs or request new features for the web app or the Obsidian plugin is via the [GitHub issues page](https://github.com/mcndt/obsidian-quickshare/issues/new/choose).
 
 If you want a more interactive way to discuss bugs or features, you can join the [Discord server](https://discord.gg/y3HqyGeABK).
 

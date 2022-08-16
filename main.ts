@@ -54,7 +54,7 @@ export default class NoteSharingPlugin extends Plugin {
 
 	addCommands() {
 		this.addCommand({
-			id: "obsidian-note-sharing-share-note",
+			id: "obsidian-quickshare-share-note",
 			name: "Create share link",
 			checkCallback: (checking: boolean) => {
 				// Only works on Markdown views

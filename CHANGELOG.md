@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.0]
+
+- Rebranded the plugin to QuickShare. I believe this better encapsulates what the plugin does, and is easier to say.
+
 ## [0.1.1]
 
 

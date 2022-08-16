@@ -1,0 +1,4 @@
+/* Dummy class to fool the build system into not producing an error */
+.dummy {
+    background: #fff;
+}

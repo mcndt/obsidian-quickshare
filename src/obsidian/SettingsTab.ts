@@ -35,7 +35,7 @@ export default class SettingsTab extends PluginSettingTab {
 						this.showSelfhostedSettings(
 							this.plugin.settings.selfHosted
 						);
-						if (value === false) {
+						if (this.plugin.settings.selfHosted === false) {
 							this.plugin.settings.serverUrl =
 								DEFAULT_SETTINGS.serverUrl;
 							this.selfHostedUrl.setValue(

@@ -21,7 +21,9 @@ export default class NoteSharingPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 		this.noteSharingService = new NoteSharingService(
-			this.settings.serverUrl
+			this.settings.serverUrl,
+			this.settings.anonymousUserId,
+			this.manifest.version
 		);
 
 		// Init settings tab
@@ -45,11 +47,14 @@ export default class NoteSharingPlugin extends Plugin {
 			DEFAULT_SETTINGS,
 			await this.loadData()
 		);
+		await this.saveSettings();
 	}
 
 	async saveSettings() {
 		await this.saveData(this.settings);
-		this.noteSharingService.serverUrl = this.settings.serverUrl;
+		if (this.noteSharingService) {
+			this.noteSharingService.serverUrl = this.settings.serverUrl;
+		}
 	}
 
 	addCommands() {

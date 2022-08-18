@@ -9,9 +9,13 @@ type Response = {
 
 export class NoteSharingService {
 	private _url: string;
+	private _userId: string;
+	private _pluginVersion: string;
 
-	constructor(serverUrl: string) {
+	constructor(serverUrl: string, userId: string, pluginVersion: string) {
 		this.serverUrl = serverUrl;
+		this._userId = userId;
+		this._pluginVersion = pluginVersion;
 	}
 
 	/**
@@ -35,7 +39,12 @@ export class NoteSharingService {
 			url: `${this._url}/api/note`,
 			method: "POST",
 			contentType: "application/json",
-			body: JSON.stringify({ ciphertext, hmac }),
+			body: JSON.stringify({
+				ciphertext: ciphertext,
+				hmac: hmac,
+				user_id: this._userId,
+				plugin_version: this._pluginVersion,
+			}),
 		});
 
 		if (res.status == 200 && res.json != null) {

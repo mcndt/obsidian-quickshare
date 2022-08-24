@@ -24,6 +24,7 @@
 		"c8": "^7.11.3",
 		"esbuild": "0.13.12",
 		"esbuild-svelte": "^0.7.1",
+		"happy-dom": "^6.0.4",
 		"obsidian": "latest",
 		"svelte": "^3.49.0",
 		"svelte-preprocess": "^4.10.7",

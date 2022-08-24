@@ -24,7 +24,7 @@ export class NoteSharingService {
 	 */
 	public async shareNote(mdText: string): Promise<Response> {
 		mdText = this.sanitizeNote(mdText);
-		const cryptData = encryptMarkdown(mdText);
+		const cryptData = await encryptMarkdown(mdText);
 		const res = await this.postNote(cryptData.ciphertext, cryptData.hmac);
 		res.view_url += `#${cryptData.key}`;
 		console.log(`Note shared: ${res.view_url}`);
@@ -44,6 +44,7 @@ export class NoteSharingService {
 				hmac: hmac,
 				user_id: this._userId,
 				plugin_version: this._pluginVersion,
+				crypto_version: "v2",
 			}),
 		});
 

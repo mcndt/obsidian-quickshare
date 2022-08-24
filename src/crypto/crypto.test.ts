@@ -1,38 +1,74 @@
-import { describe, expect, it } from "vitest";
-import { encryptString, decryptString, generateKey } from "./crypto";
+import { describe, expect, it, vi } from "vitest";
+import {
+	encryptString,
+	decryptString,
+	generateKey,
+	masterKeyToString,
+	base64ToArrayBuffer,
+} from "./crypto";
 
-const testKey = "0123456789ABCDEF";
+import { webcrypto } from "crypto";
+
+vi.stubGlobal("crypto", {
+	subtle: webcrypto.subtle,
+});
+
 const testData = "This is the test data.";
-const derivedTestKey = "1UPCi_Wvhl8EsfW2cERtOL9KB5RbZkmmIa5wMrLLz6E";
 
 describe("Encryption suite", () => {
-	it("should generate 256-bit keys", () => {
-		const key = generateKey(testData);
-		expect(key).toHaveLength(43);
+	it("should convert to and from base64 correctly", async () => {
+		const secret = await generateKey(testData);
+		const secretString = masterKeyToString(secret);
+		const secret2 = base64ToArrayBuffer(secretString);
+
+		expect(secret2).toEqual(secret);
 	});
 
-	it("should generate deterministic 256-bit keys from seed material", () => {
-		const key = generateKey(testData);
-		expect(key).toEqual(derivedTestKey);
+	it("should generate 256-bit keys", async () => {
+		const key = await generateKey(testData);
+		expect(key.byteLength).toEqual(32);
+		expect(masterKeyToString(key)).toHaveLength(44);
 	});
 
-	it("should encrypt", () => {
-		const encryptedData = encryptString(testData, testKey);
+	it("should generate deterministic 256-bit keys from seed material", async () => {
+		const key1 = await generateKey(testData);
+		const key2 = await generateKey(testData);
+		expect(key1).toEqual(key2);
+	});
+
+	it("should encrypt", async () => {
+		const key = await generateKey(testData);
+		const encryptedData = await encryptString(testData, key);
 		expect(encryptedData).toHaveProperty("ciphertext");
 		expect(encryptedData).toHaveProperty("hmac");
 	});
 
-	it("should decrypt encrypted data with the correct key", () => {
-		const encryptedData = encryptString(testData, testKey);
-		const data = decryptString(encryptedData, testKey);
+	it("should decrypt encrypted data with the correct key", async () => {
+		const key = await generateKey(testData);
+		const encryptedData = await encryptString(testData, key);
+		const data = await decryptString(encryptedData, key);
 		expect(data).toEqual(testData);
 	});
 
-	it("should fail decrypting with wrong key", () => {
-		const ciphertext = encryptString(testData, testKey);
-		const tempKey = generateKey("wrong key");
-		expect(() => {
-			decryptString(ciphertext, tempKey);
-		}).toThrowError(/Cannot decrypt ciphertext with this key./g);
+	it("should decrypt encrypted data with the correct deserialized key", async () => {
+		const key = await generateKey(testData);
+		const encryptedData = await encryptString(testData, key);
+		const keyString = masterKeyToString(key);
+
+		console.log(keyString);
+		console.log(encryptedData);
+
+		const key2 = base64ToArrayBuffer(keyString);
+		const data = await decryptString(encryptedData, key2);
+		expect(data).toEqual(testData);
+	});
+
+	it("should fail decrypting with wrong key", async () => {
+		const key = await generateKey(testData);
+		const ciphertext = await encryptString(testData, key);
+		const tempKey = await generateKey("wrong key");
+		await expect(decryptString(ciphertext, tempKey)).rejects.toThrowError(
+			/Cannot decrypt ciphertext with this key./g
+		);
 	});
 });

@@ -1,6 +1,6 @@
 import moment, { type Moment } from "moment";
-import { requestUrl } from "obsidian";
-import { encryptMarkdown } from "./crypto/encryption";
+import { requestUrl, type EmbedCache } from "obsidian";
+import { encryptMarkdown, getKey } from "./crypto/encryption";
 
 type Response = {
 	view_url: string;
@@ -19,16 +19,59 @@ export class NoteSharingService {
 	}
 
 	/**
-	 * @param mdText Markdown file to share.
+	 * @param md Markdown file to share.
+	 * @param embeds Optional array of EmbedCache to include in the share link.
 	 * @returns link to shared note with attached decryption key.
 	 */
-	public async shareNote(mdText: string): Promise<Response> {
-		mdText = this.sanitizeNote(mdText);
-		const cryptData = await encryptMarkdown(mdText);
-		const res = await this.postNote(cryptData.ciphertext, cryptData.hmac);
-		res.view_url += `#${cryptData.key}`;
+	public async shareNote(
+		md: string,
+		embeds?: EmbedCache[]
+	): Promise<Response> {
+		// generate key from content
+		const key = await getKey(md);
+
+		// TODO: load and encrypt embedded files
+		// const encryptedEmbeds = ...
+
+		// santize note content
+		const sanitizedMd = this.sanitizeNote(md);
+
+		// TODO: Enrich Markdown with e.g. rendered DataView queries
+		const enrichedMd = sanitizedMd;
+
+		// encrypt note content
+		const encryptedMd = await encryptMarkdown(enrichedMd, key);
+
+		// TODO: check final payload size
+		// ...
+
+		// upload encrypted note
+		const res = await this.postNote(
+			encryptedMd.ciphertext,
+			encryptedMd.hmac
+		);
+
+		// return link to shared note
+		res.view_url += `#${encryptedMd.key}`;
 		console.log(`Note shared: ${res.view_url}`);
 		return res;
+	}
+
+	/**
+	 * Sanitizes a note by removing the following:
+	 * - YAML frontmatter
+	 * @param mdText Markdown text to sanitize.
+	 * @returns  sanitized markdown text.
+	 */
+	private sanitizeNote(mdText: string): string {
+		mdText = mdText.trim();
+		const match = mdText.match(
+			/^(?:---\s*\n)(?:(?:.*?\n)*?)(?:---)((?:.|\n|\r)*)/
+		);
+		if (match) {
+			mdText = match[1].trim();
+		}
+		return mdText;
 	}
 
 	private async postNote(
@@ -56,17 +99,6 @@ export class NoteSharingService {
 		throw Error(
 			`Error uploading encrypted note (${res.status}): ${res.text}`
 		);
-	}
-
-	private sanitizeNote(mdText: string): string {
-		mdText = mdText.trim();
-		const match = mdText.match(
-			/^(?:---\s*\n)(?:(?:.*?\n)*?)(?:---)((?:.|\n|\r)*)/
-		);
-		if (match) {
-			mdText = match[1].trim();
-		}
-		return mdText;
 	}
 
 	public set serverUrl(newUrl: string) {

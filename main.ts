@@ -5,6 +5,7 @@ import {
 	Plugin,
 	TAbstractFile,
 	TFile,
+	type EmbedCache,
 } from "obsidian";
 import { NoteSharingService } from "src/NoteSharingService";
 import { DEFAULT_SETTINGS } from "src/obsidian/PluginSettings";
@@ -67,7 +68,8 @@ export default class NoteSharingPlugin extends Plugin {
 					this.app.workspace.getActiveViewOfType(MarkdownView);
 				if (!activeView) return false;
 				if (checking) return true;
-				this.shareNote(activeView.getViewData());
+
+				this.shareNote(activeView);
 			},
 		});
 	}
@@ -79,15 +81,20 @@ export default class NoteSharingPlugin extends Plugin {
 				item.setIcon("paper-plane-glyph");
 				item.setTitle("Create share link");
 				item.onClick(async (evt) => {
-					this.shareNote(await this.app.vault.read(file));
+					const activeView =
+						this.app.workspace.getActiveViewOfType(MarkdownView);
+					this.shareNote(activeView);
 				});
 			});
 		}
 	}
 
-	async shareNote(mdText: string) {
+	async shareNote(view: MarkdownView) {
+		// get cached embedded files
+		const embeds = this.app.metadataCache.getFileCache(view.file).embeds;
+
 		this.noteSharingService
-			.shareNote(mdText)
+			.shareNote(view.getViewData(), embeds)
 			.then((res) => {
 				new SharedNoteSuccessModal(
 					this,

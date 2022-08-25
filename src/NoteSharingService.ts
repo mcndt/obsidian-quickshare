@@ -1,21 +1,39 @@
 import moment, { type Moment } from "moment";
-import { requestUrl, type EmbedCache } from "obsidian";
-import { encryptMarkdown, getKey } from "./crypto/encryption";
+import { App, requestUrl, TFile, type EmbedCache } from "obsidian";
+import type { EncryptedData } from "./crypto/crypto";
+import {
+	encryptData,
+	encryptMarkdown,
+	deriveKey,
+	type MasterSecret,
+	getBase64Key,
+} from "./crypto/encryption";
 
 type Response = {
 	view_url: string;
 	expire_time: Moment;
 };
 
+interface EncryptedEmbed extends EncryptedData {
+	embedId: string;
+}
+
 export class NoteSharingService {
 	private _url: string;
 	private _userId: string;
 	private _pluginVersion: string;
+	private _app: App;
 
-	constructor(serverUrl: string, userId: string, pluginVersion: string) {
+	constructor(
+		serverUrl: string,
+		userId: string,
+		pluginVersion: string,
+		app: App
+	) {
 		this.serverUrl = serverUrl;
 		this._userId = userId;
 		this._pluginVersion = pluginVersion;
+		this._app = app;
 	}
 
 	/**
@@ -23,15 +41,13 @@ export class NoteSharingService {
 	 * @param embeds Optional array of EmbedCache to include in the share link.
 	 * @returns link to shared note with attached decryption key.
 	 */
-	public async shareNote(
-		md: string,
-		embeds?: EmbedCache[]
-	): Promise<Response> {
+	public async shareNote(md: string, file: TFile): Promise<Response> {
 		// generate key from content
-		const key = await getKey(md);
+		const key = await deriveKey(md);
 
 		// TODO: load and encrypt embedded files
-		// const encryptedEmbeds = ...
+		const encryptedEmbeds = await this.loadAndEncryptEmbeds(file, key);
+		console.log(encryptedEmbeds);
 
 		// santize note content
 		const sanitizedMd = this.sanitizeNote(md);
@@ -52,9 +68,45 @@ export class NoteSharingService {
 		);
 
 		// return link to shared note
-		res.view_url += `#${encryptedMd.key}`;
+		const keyString = getBase64Key(key);
+		res.view_url += `#${keyString}`;
 		console.log(`Note shared: ${res.view_url}`);
 		return res;
+	}
+
+	private async loadAndEncryptEmbeds(
+		baseFile: TFile,
+		key: MasterSecret
+	): Promise<EncryptedData[]> {
+		// thanks to Mara#3000 for this code!
+		const embeds = this._app.metadataCache.getFileCache(baseFile).embeds;
+		if (embeds == null) return [];
+		const encryptedEmbeds = await Promise.all(
+			embeds.map((e) => this.loadAndEncryptEmbed(e, baseFile, key))
+		);
+		return encryptedEmbeds.filter((e) => e != null);
+	}
+
+	/**
+	 * Checks if a file is embeddable (e.g. image), then encrypts it.
+	 * @param embed Cache of an embed to share.
+	 * @param baseFile The file that contains the embed.
+	 * @param key The master secret to derive AES and HMAC keys from.
+	 * @returns The encrypted embed if file extension is supported, null otherwise.
+	 */
+	private async loadAndEncryptEmbed(
+		embed: EmbedCache,
+		baseFile: TFile,
+		key: MasterSecret
+	): Promise<EncryptedEmbed | null> {
+		const file = this._app.metadataCache.getFirstLinkpathDest(
+			embed.link,
+			baseFile.path
+		);
+		if (!isEmbeddable(file)) return null;
+		const data = await this._app.vault.adapter.readBinary(file.path);
+		const cryptData = await encryptData(data, key);
+		return { ...cryptData, embedId: await getEmbedId(embed.link) };
 	}
 
 	/**
@@ -108,4 +160,24 @@ export class NoteSharingService {
 		}
 		this._url = newUrl;
 	}
+}
+
+function isEmbeddable(file: TFile): boolean {
+	return isImage(file.extension);
+}
+
+function isImage(extension: string): boolean {
+	return extension.match(/(png|jpe?g|svg|bmp|gif|)$/i)[0]?.length > 0;
+}
+
+async function getEmbedId(embedLink: string): Promise<string> {
+	// generate 64 bit id
+	const idBuf = new Uint32Array((await deriveKey(embedLink)).slice(0, 8));
+
+	// convert idBuf to base 32 string
+	const id = idBuf.reduce((acc, cur) => {
+		return acc + cur.toString(32);
+	}, "");
+
+	return id;
 }

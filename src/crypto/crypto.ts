@@ -1,4 +1,4 @@
-interface EncryptedData {
+export interface EncryptedData {
 	ciphertext: string;
 	hmac: string;
 }
@@ -41,11 +41,17 @@ export async function encryptString(
 	secret: ArrayBuffer
 ): Promise<EncryptedData> {
 	const plaintext = new TextEncoder().encode(md);
+	return encryptArrayBuffer(plaintext, secret);
+}
 
+export async function encryptArrayBuffer(
+	buf: ArrayBuffer,
+	secret: ArrayBuffer
+): Promise<EncryptedData> {
 	const buf_ciphertext: ArrayBuffer = await window.crypto.subtle.encrypt(
 		{ name: "AES-CBC", iv: new Uint8Array(16) },
 		await _getAesKey(secret),
-		plaintext
+		buf
 	);
 	const ciphertext = arrayBufferToBase64(buf_ciphertext);
 
@@ -85,8 +91,15 @@ export async function decryptString(
 	return new TextDecoder().decode(md);
 }
 
-export function arrayBufferToBase64(buffer: ArrayBuffer): string {
-	return window.btoa(String.fromCharCode(...new Uint8Array(buffer)));
+export function arrayBufferToBase64(buffer: ArrayBuffer) {
+	// see https://stackoverflow.com/questions/38432611/converting-arraybuffer-to-string-maximum-call-stack-size-exceeded
+	let binary = "";
+	const bytes = new Uint8Array(buffer);
+	const len = bytes.byteLength;
+	for (let i = 0; i < len; i++) {
+		binary += String.fromCharCode(bytes[i]);
+	}
+	return window.btoa(binary);
 }
 
 export function base64ToArrayBuffer(base64: string): ArrayBuffer {

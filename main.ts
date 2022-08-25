@@ -5,7 +5,6 @@ import {
 	Plugin,
 	TAbstractFile,
 	TFile,
-	type EmbedCache,
 } from "obsidian";
 import { NoteSharingService } from "src/NoteSharingService";
 import { DEFAULT_SETTINGS } from "src/obsidian/PluginSettings";
@@ -24,7 +23,8 @@ export default class NoteSharingPlugin extends Plugin {
 		this.noteSharingService = new NoteSharingService(
 			this.settings.serverUrl,
 			this.settings.anonymousUserId,
-			this.manifest.version
+			this.manifest.version,
+			this.app
 		);
 
 		// Init settings tab
@@ -91,10 +91,11 @@ export default class NoteSharingPlugin extends Plugin {
 
 	async shareNote(view: MarkdownView) {
 		// get cached embedded files
-		const embeds = this.app.metadataCache.getFileCache(view.file).embeds;
+		const md = view.getViewData();
+		const file = view.file;
 
 		this.noteSharingService
-			.shareNote(view.getViewData(), embeds)
+			.shareNote(md, file)
 			.then((res) => {
 				new SharedNoteSuccessModal(
 					this,

@@ -1,5 +1,8 @@
 # Changelog
 
+## [0.4.0]
+
+- feat: New notes are now encrypted using the SubtleCrypto web standard for better security and performance.
 ## [0.3.0]
 
 - The plugin now sends an anonymous user id and your plugin version to server. This will be used to track broad usage service utility trends (e.g. active users/week) and apply fair use limits per user. The user id is generated using a random number generator and reveals no identifiable information about the user.

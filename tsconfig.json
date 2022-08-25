@@ -12,7 +12,8 @@
 		"importHelpers": true,
 		"isolatedModules": true,
 		"outDir": "./build" /* Specify an output folder for all emitted files. */,
-		"lib": ["DOM", "ES5", "ES6", "ES7"]
+		"lib": ["dom", "ES5", "ES6", "ES7"],
+		"typeRoots": ["./node_modules/@types", "./src/types"]
 	},
 	"include": ["**/*.ts"]
 }

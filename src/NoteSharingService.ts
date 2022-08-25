@@ -64,7 +64,8 @@ export class NoteSharingService {
 		// upload encrypted note
 		const res = await this.postNote(
 			encryptedMd.ciphertext,
-			encryptedMd.hmac
+			encryptedMd.hmac,
+			encryptedEmbeds
 		);
 
 		// return link to shared note
@@ -77,7 +78,7 @@ export class NoteSharingService {
 	private async loadAndEncryptEmbeds(
 		baseFile: TFile,
 		key: MasterSecret
-	): Promise<EncryptedData[]> {
+	): Promise<EncryptedEmbed[]> {
 		// thanks to Mara#3000 for this code!
 		const embeds = this._app.metadataCache.getFileCache(baseFile).embeds;
 		if (embeds == null) return [];
@@ -128,7 +129,8 @@ export class NoteSharingService {
 
 	private async postNote(
 		ciphertext: string,
-		hmac: string
+		hmac: string,
+		embeds: EncryptedEmbed[] = []
 	): Promise<Response> {
 		const res = await requestUrl({
 			url: `${this._url}/api/note`,
@@ -140,6 +142,7 @@ export class NoteSharingService {
 				user_id: this._userId,
 				plugin_version: this._pluginVersion,
 				crypto_version: "v2",
+				embeds: embeds,
 			}),
 		});
 

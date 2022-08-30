@@ -15,7 +15,7 @@ type Response = {
 };
 
 interface EncryptedEmbed extends EncryptedData {
-	embedId: string;
+	embed_id: string;
 }
 
 export class NoteSharingService {
@@ -107,7 +107,7 @@ export class NoteSharingService {
 		if (!isEmbeddable(file)) return null;
 		const data = await this._app.vault.adapter.readBinary(file.path);
 		const cryptData = await encryptData(data, key);
-		return { ...cryptData, embedId: await getEmbedId(embed.link) };
+		return { ...cryptData, embed_id: await getEmbedId(embed.link) };
 	}
 
 	/**

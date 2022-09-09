@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0]
+
+Obsidian QuickShare and Noteshare.space are now out of beta 🚀 You can now find the plugin
+in the Obsidian community plugin marketplace (see [instructions](https://noteshare.space/install)).
+Check out the roadmap for upcoming features [here](https://noteshare.space/roadmap).
+
+This release is further identical to version 0.4.1.
+
 ## [0.4.0]
 
 - feat: New notes are now encrypted using the SubtleCrypto web standard for better security and performance.

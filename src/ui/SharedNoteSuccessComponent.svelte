@@ -13,7 +13,7 @@
 		buttonText = "Copied";
 
 		buttonTextTimeout = setTimeout(() => {
-			buttonText = "copy";
+			buttonText = "Copy";
 		}, 1500);
 	}
 

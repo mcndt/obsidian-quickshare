@@ -12,8 +12,15 @@ export interface EncryptedData {
 	hmac: string;
 }
 
-export async function deriveKey(md: string): Promise<MasterSecret> {
-	const key = await generateKey(moment.now() + md);
+export async function deriveRandomKey(material: string): Promise<MasterSecret> {
+	const key = await generateKey(moment.now() + material);
+	return key;
+}
+
+export async function deriveDeterministicKey(
+	material: string
+): Promise<MasterSecret> {
+	const key = await generateKey(material);
 	return key;
 }
 

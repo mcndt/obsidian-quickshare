@@ -4,9 +4,10 @@ import type { EncryptedData } from "./crypto/crypto";
 import {
 	encryptData,
 	encryptMarkdown,
-	deriveKey,
+	deriveRandomKey,
 	type MasterSecret,
 	getBase64Key,
+	deriveDeterministicKey,
 } from "./crypto/encryption";
 
 type Response = {
@@ -43,7 +44,7 @@ export class NoteSharingService {
 	 */
 	public async shareNote(md: string, file: TFile): Promise<Response> {
 		// generate key from content
-		const key = await deriveKey(md);
+		const key = await deriveRandomKey(md);
 
 		// TODO: load and encrypt embedded files
 		const encryptedEmbeds = await this.loadAndEncryptEmbeds(file, key);
@@ -175,7 +176,9 @@ function isImage(extension: string): boolean {
 
 async function getEmbedId(embedLink: string): Promise<string> {
 	// generate 64 bit id
-	const idBuf = new Uint32Array((await deriveKey(embedLink)).slice(0, 8));
+	const idBuf = new Uint32Array(
+		(await deriveDeterministicKey(embedLink)).slice(0, 8)
+	);
 
 	// convert idBuf to base 32 string
 	const id = idBuf.reduce((acc, cur) => {

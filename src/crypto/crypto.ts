@@ -10,9 +10,23 @@ interface EncryptedData {
  * @param seed passphrase-like data to generate the key from.
  */
 export async function generateKey(seed: string): Promise<ArrayBuffer> {
+	const _seed = new TextEncoder().encode(seed);
+	return _generateKey(_seed);
+}
+
+/**
+ * Generates a random 256-bit key using crypto.getRandomValues.
+ */
+export async function generateRandomKey(): Promise<ArrayBuffer> {
+	const seed = window.crypto.getRandomValues(new Uint8Array(64));
+	console.log("random key!!!");
+	return _generateKey(seed);
+}
+
+async function _generateKey(seed: ArrayBuffer) {
 	const keyMaterial = await window.crypto.subtle.importKey(
 		"raw",
-		new TextEncoder().encode(seed),
+		seed,
 		{ name: "PBKDF2" },
 		false,
 		["deriveBits"]

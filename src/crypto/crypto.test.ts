@@ -5,11 +5,14 @@ import {
 	generateKey,
 	masterKeyToString,
 	base64ToArrayBuffer,
+	generateRandomKey,
 } from "./crypto";
 
 import { webcrypto } from "crypto";
 
 vi.stubGlobal("crypto", {
+	// @ts-ignore - bad typing on webcrypto
+	getRandomValues: webcrypto.getRandomValues,
 	subtle: webcrypto.subtle,
 });
 
@@ -28,12 +31,22 @@ describe("Encryption suite", () => {
 		const key = await generateKey(testData);
 		expect(key.byteLength).toEqual(32);
 		expect(masterKeyToString(key)).toHaveLength(44);
+
+		const key2 = await generateRandomKey();
+		expect(key2.byteLength).toEqual(32);
+		expect(masterKeyToString(key2)).toHaveLength(44);
 	});
 
 	it("should generate deterministic 256-bit keys from seed material", async () => {
 		const key1 = await generateKey(testData);
 		const key2 = await generateKey(testData);
 		expect(key1).toEqual(key2);
+	});
+
+	it("should generate random 256-bit keys", async () => {
+		const key = await generateRandomKey();
+		const key2 = await generateRandomKey();
+		expect(key).not.toEqual(key2);
 	});
 
 	it("should encrypt", async () => {

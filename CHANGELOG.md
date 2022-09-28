@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.0.1]
+
+- security: changed key generation implementation to mitigate content verification attack (see https://github.com/mcndt/obsidian-quickshare/issues/20 to learn more).
 ## [1.0.0]
 
 Obsidian QuickShare and Noteshare.space are now out of beta 🚀 You can now find the plugin

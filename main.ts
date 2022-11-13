@@ -12,6 +12,7 @@ import SettingsTab from "src/obsidian/SettingsTab";
 import { SharedNoteSuccessModal } from "src/ui/SharedNoteSuccessModal";
 import type { EventRef } from "obsidian";
 import type { PluginSettings } from "src/obsidian/PluginSettings";
+import { useFrontmatterHelper } from "src/obsidian/Frontmatter";
 
 export default class NoteSharingPlugin extends Plugin {
 	public settings: PluginSettings;
@@ -67,7 +68,7 @@ export default class NoteSharingPlugin extends Plugin {
 					this.app.workspace.getActiveViewOfType(MarkdownView);
 				if (!activeView) return false;
 				if (checking) return true;
-				this.shareNote(activeView.getViewData());
+				this.shareNote(activeView.file);
 			},
 		});
 	}
@@ -79,16 +80,27 @@ export default class NoteSharingPlugin extends Plugin {
 				item.setIcon("paper-plane-glyph");
 				item.setTitle("Create share link");
 				item.onClick(async (evt) => {
-					this.shareNote(await this.app.vault.read(file));
+					this.shareNote(file);
 				});
 			});
 		}
 	}
 
-	async shareNote(mdText: string) {
+	async shareNote(file: TFile) {
+		const { setFrontmatterKeys } = useFrontmatterHelper(this.app);
+
 		this.noteSharingService
-			.shareNote(mdText)
+			.shareNote(await this.app.vault.read(file))
 			.then((res) => {
+				// format a locale-formatted datetime for now
+				const now = new Date().toLocaleString();
+				console.log(now);
+
+				setFrontmatterKeys(file, {
+					url: res.view_url,
+					datetime: now,
+				});
+
 				new SharedNoteSuccessModal(
 					this,
 					res.view_url,

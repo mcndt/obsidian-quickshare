@@ -1,6 +1,8 @@
 interface EncryptedData {
 	ciphertext: string;
-	hmac: string;
+	iv: string;
+	/** @deprecated Please use GCM encryption instead. */
+	hmac?: string;
 }
 
 /**
@@ -19,7 +21,6 @@ export async function generateKey(seed: string): Promise<ArrayBuffer> {
  */
 export async function generateRandomKey(): Promise<ArrayBuffer> {
 	const seed = window.crypto.getRandomValues(new Uint8Array(64));
-	console.log("random key!!!");
 	return _generateKey(seed);
 }
 
@@ -56,46 +57,34 @@ export async function encryptString(
 ): Promise<EncryptedData> {
 	const plaintext = new TextEncoder().encode(md);
 
+	const iv = window.crypto.getRandomValues(new Uint8Array(16));
+
 	const buf_ciphertext: ArrayBuffer = await window.crypto.subtle.encrypt(
-		{ name: "AES-CBC", iv: new Uint8Array(16) },
-		await _getAesKey(secret),
+		{ name: "AES-GCM", iv: iv },
+		await _getAesGcmKey(secret),
 		plaintext
 	);
 	const ciphertext = arrayBufferToBase64(buf_ciphertext);
 
-	const buf_hmac = await window.crypto.subtle.sign(
-		{ name: "HMAC", hash: "SHA-256" },
-		await _getSignKey(secret),
-		buf_ciphertext
-	);
-	const hmac = arrayBufferToBase64(buf_hmac);
-
-	return { ciphertext, hmac };
+	return { ciphertext, iv: arrayBufferToBase64(iv) };
 }
 
 export async function decryptString(
-	{ ciphertext, hmac }: EncryptedData,
+	{ ciphertext, iv }: EncryptedData,
 	secret: ArrayBuffer
 ): Promise<string> {
 	const ciphertext_buf = base64ToArrayBuffer(ciphertext);
-	const hmac_buf = base64ToArrayBuffer(hmac);
+	const iv_buf = base64ToArrayBuffer(iv);
 
-	const is_authentic = await window.crypto.subtle.verify(
-		{ name: "HMAC", hash: "SHA-256" },
-		await _getSignKey(secret),
-		hmac_buf,
-		ciphertext_buf
-	);
-
-	if (!is_authentic) {
-		throw Error("Cannot decrypt ciphertext with this key.");
-	}
-
-	const md = await window.crypto.subtle.decrypt(
-		{ name: "AES-CBC", iv: new Uint8Array(16) },
-		await _getAesKey(secret),
-		ciphertext_buf
-	);
+	const md = await window.crypto.subtle
+		.decrypt(
+			{ name: "AES-GCM", iv: iv_buf },
+			await _getAesGcmKey(secret),
+			ciphertext_buf
+		)
+		.catch((e) => {
+			throw new Error(`Cannot decrypt ciphertext with this key.`);
+		});
 	return new TextDecoder().decode(md);
 }
 
@@ -107,22 +96,12 @@ export function base64ToArrayBuffer(base64: string): ArrayBuffer {
 	return Uint8Array.from(window.atob(base64), (c) => c.charCodeAt(0));
 }
 
-function _getAesKey(secret: ArrayBuffer): Promise<CryptoKey> {
+function _getAesGcmKey(secret: ArrayBuffer): Promise<CryptoKey> {
 	return window.crypto.subtle.importKey(
 		"raw",
 		secret,
-		{ name: "AES-CBC", length: 256 },
+		{ name: "AES-GCM", length: 256 },
 		false,
 		["encrypt", "decrypt"]
-	);
-}
-
-function _getSignKey(secret: ArrayBuffer): Promise<CryptoKey> {
-	return window.crypto.subtle.importKey(
-		"raw",
-		secret,
-		{ name: "HMAC", hash: "SHA-256" },
-		false,
-		["sign", "verify"]
 	);
 }

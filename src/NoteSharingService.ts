@@ -24,27 +24,24 @@ export class NoteSharingService {
 	 */
 	public async shareNote(mdText: string): Promise<Response> {
 		mdText = this.sanitizeNote(mdText);
-		const cryptData = await encryptMarkdown(mdText);
-		const res = await this.postNote(cryptData.ciphertext, cryptData.hmac);
-		res.view_url += `#${cryptData.key}`;
+		const { ciphertext, iv, key } = await encryptMarkdown(mdText);
+		const res = await this.postNote(ciphertext, iv);
+		res.view_url += `#${key}`;
 		console.log(`Note shared: ${res.view_url}`);
 		return res;
 	}
 
-	private async postNote(
-		ciphertext: string,
-		hmac: string
-	): Promise<Response> {
+	private async postNote(ciphertext: string, iv: string): Promise<Response> {
 		const res = await requestUrl({
 			url: `${this._url}/api/note`,
 			method: "POST",
 			contentType: "application/json",
 			body: JSON.stringify({
 				ciphertext: ciphertext,
-				hmac: hmac,
+				iv: iv,
 				user_id: this._userId,
 				plugin_version: this._pluginVersion,
-				crypto_version: "v2",
+				crypto_version: "v3",
 			}),
 		});
 

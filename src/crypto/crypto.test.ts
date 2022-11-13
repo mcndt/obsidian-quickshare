@@ -19,7 +19,7 @@ vi.stubGlobal("crypto", {
 const testData = "This is the test data.";
 
 describe("Encryption suite", () => {
-	it("should convert to and from base64 correctly", async () => {
+	it("should convert a key to and from base64 correctly", async () => {
 		const secret = await generateKey(testData);
 		const secretString = masterKeyToString(secret);
 		const secret2 = base64ToArrayBuffer(secretString);
@@ -53,7 +53,7 @@ describe("Encryption suite", () => {
 		const key = await generateKey(testData);
 		const encryptedData = await encryptString(testData, key);
 		expect(encryptedData).toHaveProperty("ciphertext");
-		expect(encryptedData).toHaveProperty("hmac");
+		expect(encryptedData).toHaveProperty("iv");
 	});
 
 	it("should decrypt encrypted data with the correct key", async () => {
@@ -67,9 +67,6 @@ describe("Encryption suite", () => {
 		const key = await generateKey(testData);
 		const encryptedData = await encryptString(testData, key);
 		const keyString = masterKeyToString(key);
-
-		console.log(keyString);
-		console.log(encryptedData);
 
 		const key2 = base64ToArrayBuffer(keyString);
 		const data = await decryptString(encryptedData, key2);

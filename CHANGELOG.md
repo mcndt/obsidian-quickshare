@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.1]
+
+-   improvement: frontmatter URL is now wrapped in quotation marks to escape YAML formatting.
+-   improvement: frontmatter can be turned off in the settings
+-   improvement: frontmatter date format can be set in settings
+
 ## [1.1.0]
 
 -   feat: After sharing a note, the URL is now stored in the note's frontmatter, along with the time it was shared.

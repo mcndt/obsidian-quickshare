@@ -6,6 +6,7 @@ export default class SettingsTab extends PluginSettingTab {
 	plugin: NoteSharingPlugin;
 
 	private selfHostSettings: HTMLElement;
+	private frontmatterSettings: HTMLElement;
 	private hideSelfHosted: boolean;
 	private selfHostedUrl: TextComponent;
 
@@ -46,10 +47,9 @@ export default class SettingsTab extends PluginSettingTab {
 					})
 			);
 
+		// Self-hosted settings
 		this.selfHostSettings = containerEl.createDiv();
-
-		this.selfHostSettings.createEl("h3", { text: "Self-hosting options" });
-
+		this.selfHostSettings.createEl("h2", { text: "Self-hosting options" });
 		new Setting(this.selfHostSettings)
 			.setName("Server URL")
 			.setDesc(
@@ -64,10 +64,55 @@ export default class SettingsTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					});
 			});
+
 		this.showSelfhostedSettings(this.plugin.settings.selfHosted);
+
+		// Frontmatter settings
+		containerEl.createEl("h2", { text: "Frontmatter options" });
+
+		new Setting(containerEl)
+			.setName("Use frontmatter")
+			.setDesc(
+				"Use frontmatter to store the QuickShare URL and share date after sharing."
+			)
+			.addToggle((text) =>
+				text
+					.setValue(this.plugin.settings.useFrontmatter)
+					.onChange(async (value) => {
+						this.plugin.settings.useFrontmatter = value;
+						await this.plugin.saveSettings();
+						this.showFrontmatterSettings(
+							this.plugin.settings.useFrontmatter
+						);
+					})
+			);
+
+		// Frontmatter date format
+		this.frontmatterSettings = containerEl.createDiv();
+
+		new Setting(this.frontmatterSettings)
+			.setName("Frontmatter date format")
+			.setDesc(
+				"See https://momentjs.com/docs/#/displaying/format/ for formatting options."
+			)
+			.addMomentFormat((text) =>
+				text
+					.setDefaultFormat(DEFAULT_SETTINGS.frontmatterDateFormat)
+					.setValue(this.plugin.settings.frontmatterDateFormat)
+					.onChange(async (value) => {
+						this.plugin.settings.frontmatterDateFormat = value;
+						await this.plugin.saveSettings();
+					})
+			);
+
+		this.showFrontmatterSettings(this.plugin.settings.useFrontmatter);
 	}
 
 	private showSelfhostedSettings(show: boolean) {
 		this.selfHostSettings.hidden = !show;
+	}
+
+	private showFrontmatterSettings(show: boolean) {
+		this.frontmatterSettings.hidden = !show;
 	}
 }

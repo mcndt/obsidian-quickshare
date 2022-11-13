@@ -1,6 +1,7 @@
 import {
 	MarkdownView,
 	Menu,
+	moment,
 	Notice,
 	Plugin,
 	TAbstractFile,
@@ -92,14 +93,16 @@ export default class NoteSharingPlugin extends Plugin {
 		this.noteSharingService
 			.shareNote(await this.app.vault.read(file))
 			.then((res) => {
-				// format a locale-formatted datetime for now
-				const now = new Date().toLocaleString();
-				console.log(now);
-
-				setFrontmatterKeys(file, {
-					url: res.view_url,
-					datetime: now,
-				});
+				if (this.settings.useFrontmatter) {
+					const datetime = moment(new Date()).format(
+						this.settings.frontmatterDateFormat ||
+							DEFAULT_SETTINGS.frontmatterDateFormat
+					);
+					setFrontmatterKeys(file, {
+						url: `"${res.view_url}"`,
+						datetime: datetime,
+					});
+				}
 
 				new SharedNoteSuccessModal(
 					this,

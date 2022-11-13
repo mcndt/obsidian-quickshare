@@ -1,7 +1,6 @@
 import {
 	MarkdownView,
 	Menu,
-	moment,
 	Notice,
 	Plugin,
 	TAbstractFile,
@@ -14,6 +13,7 @@ import { SharedNoteSuccessModal } from "src/ui/SharedNoteSuccessModal";
 import type { EventRef } from "obsidian";
 import type { PluginSettings } from "src/obsidian/PluginSettings";
 import { useFrontmatterHelper } from "src/obsidian/Frontmatter";
+import moment from "moment";
 
 export default class NoteSharingPlugin extends Plugin {
 	public settings: PluginSettings;

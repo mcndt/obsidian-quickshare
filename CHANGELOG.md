@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.0]
+
+-   feat: After sharing a note, the URL is now stored in the note's frontmatter, along with the time it was shared.
+
 ## [1.0.2]
 
 -   security: upgraded encryption schema to use a GCM cipher.

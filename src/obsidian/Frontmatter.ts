@@ -31,18 +31,18 @@ function _setFrontmatterKey(
 		// replace the existing key.
 		content = content.replace(
 			new RegExp(`^(${keyTypetoFrontmatterKey[key]}):\\s*(.*)$`, "m"),
-			`${keyTypetoFrontmatterKey[key]}: ${value}`
+			`${keyTypetoFrontmatterKey[key]}: "${value}"`
 		);
 	} else {
 		if (content.match(/^---/)) {
 			// add the key to the existing block
 			content = content.replace(
 				/^---/,
-				`---\n${keyTypetoFrontmatterKey[key]}: ${value}`
+				`---\n${keyTypetoFrontmatterKey[key]}: "${value}"`
 			);
 		} else {
 			// create a new block
-			content = `---\n${keyTypetoFrontmatterKey[key]}: ${value}\n---\n${content}`;
+			content = `---\n${keyTypetoFrontmatterKey[key]}: "${value}"\n---\n${content}`;
 		}
 	}
 

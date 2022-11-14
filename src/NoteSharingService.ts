@@ -1,6 +1,16 @@
 import moment, { type Moment } from "moment";
 import { requestUrl } from "obsidian";
-import { encryptMarkdown } from "./crypto/encryption";
+import { encryptString } from "./crypto/encryption";
+
+type ShareNoteOptions = {
+	title?: string;
+};
+
+type JsonPayload = {
+	body: string;
+	title?: string;
+	metadata?: Record<string, unknown>;
+};
 
 type Response = {
 	view_url: string;
@@ -19,12 +29,23 @@ export class NoteSharingService {
 	}
 
 	/**
-	 * @param mdText Markdown file to share.
+	 * @param body Markdown file to share.
 	 * @returns link to shared note with attached decryption key.
 	 */
-	public async shareNote(mdText: string): Promise<Response> {
-		mdText = this.sanitizeNote(mdText);
-		const { ciphertext, iv, key } = await encryptMarkdown(mdText);
+	public async shareNote(
+		body: string,
+		options?: ShareNoteOptions
+	): Promise<Response> {
+		body = this.sanitizeNote(body);
+
+		const jsonPayload: JsonPayload = {
+			body: body,
+			title: options?.title,
+		};
+
+		const stringPayload = JSON.stringify(jsonPayload);
+
+		const { ciphertext, iv, key } = await encryptString(stringPayload);
 		const res = await this.postNote(ciphertext, iv);
 		res.view_url += `#${key}`;
 		console.log(`Note shared: ${res.view_url}`);

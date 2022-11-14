@@ -90,8 +90,11 @@ export default class NoteSharingPlugin extends Plugin {
 	async shareNote(file: TFile) {
 		const { setFrontmatterKeys } = useFrontmatterHelper(this.app);
 
+		const body = await this.app.vault.read(file);
+		const title = file.basename;
+
 		this.noteSharingService
-			.shareNote(await this.app.vault.read(file))
+			.shareNote(body, { title })
 			.then((res) => {
 				if (this.settings.useFrontmatter) {
 					const datetime = moment(new Date()).format(

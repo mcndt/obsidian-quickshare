@@ -64,6 +64,7 @@ export async function encryptString(
 		await _getAesGcmKey(secret),
 		plaintext
 	);
+
 	const ciphertext = arrayBufferToBase64(buf_ciphertext);
 
 	return { ciphertext, iv: arrayBufferToBase64(iv) };

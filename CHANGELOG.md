@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.0]
+
+-   feat: the plugin now shares the note's name as title (like Obsidian's "show inline title" option in the appearance settings). This behavior can be disabled in the plugin's settings.
+
 ## [1.1.1]
 
 -   improvement: frontmatter URL is now wrapped in quotation marks to escape YAML formatting.

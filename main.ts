@@ -91,7 +91,9 @@ export default class NoteSharingPlugin extends Plugin {
 		const { setFrontmatterKeys } = useFrontmatterHelper(this.app);
 
 		const body = await this.app.vault.read(file);
-		const title = file.basename;
+		const title = this.settings.shareFilenameAsTitle
+			? file.basename
+			: undefined;
 
 		this.noteSharingService
 			.shareNote(body, { title })

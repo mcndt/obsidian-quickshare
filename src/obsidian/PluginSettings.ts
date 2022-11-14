@@ -6,6 +6,7 @@ export interface PluginSettings {
 	anonymousUserId: string;
 	useFrontmatter: boolean;
 	frontmatterDateFormat?: string;
+	shareFilenameAsTitle: boolean;
 }
 
 export const DEFAULT_SETTINGS: PluginSettings = {
@@ -14,4 +15,5 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	anonymousUserId: generateId(),
 	useFrontmatter: true,
 	frontmatterDateFormat: "YYYY-MM-DD HH:mm:ss",
+	shareFilenameAsTitle: true,
 };

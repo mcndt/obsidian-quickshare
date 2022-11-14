@@ -67,6 +67,22 @@ export default class SettingsTab extends PluginSettingTab {
 
 		this.showSelfhostedSettings(this.plugin.settings.selfHosted);
 
+		// Sharing settings
+		containerEl.createEl("h2", { text: "Sharing options" });
+		new Setting(containerEl)
+			.setName("Share filename as note title")
+			.setDesc(
+				'Use the filename as the title of the note (like "Show inline title" in Obsidian\'s appearance settings). If unchecked, the title will be the first heading in the note.'
+			)
+			.addToggle((text) =>
+				text
+					.setValue(this.plugin.settings.shareFilenameAsTitle)
+					.onChange(async (value) => {
+						this.plugin.settings.shareFilenameAsTitle = value;
+						await this.plugin.saveSettings();
+					})
+			);
+
 		// Frontmatter settings
 		containerEl.createEl("h2", { text: "Frontmatter options" });
 

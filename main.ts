@@ -15,7 +15,8 @@ import type { PluginSettings } from "src/obsidian/PluginSettings";
 import { useFrontmatterHelper } from "src/obsidian/Frontmatter";
 import moment from "moment";
 import type { QuickShareCache } from "src/lib/cache/AbstractCache";
-import { FsCache } from "src/lib/cache/FsCache";
+// import { FsCache } from "src/lib/cache/FsCache";
+import { LocalStorageCache } from "src/lib/cache/LocalStorageCache";
 
 export default class NoteSharingPlugin extends Plugin {
 	public settings: PluginSettings;
@@ -27,7 +28,8 @@ export default class NoteSharingPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
-		this.cache = new FsCache(app);
+		this.cache = new LocalStorageCache(app);
+		// this.cache = new FsCache(app);
 
 		this.noteSharingService = new NoteSharingService(
 			this.settings.serverUrl,

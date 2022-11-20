@@ -14,14 +14,21 @@ import type { EventRef } from "obsidian";
 import type { PluginSettings } from "src/obsidian/PluginSettings";
 import { useFrontmatterHelper } from "src/obsidian/Frontmatter";
 import moment from "moment";
+import type { QuickShareCache } from "src/lib/cache/AbstractCache";
+import { FsCache } from "src/lib/cache/FsCache";
 
 export default class NoteSharingPlugin extends Plugin {
 	public settings: PluginSettings;
 	private noteSharingService: NoteSharingService;
-	private eventRef: EventRef;
+	private cache: QuickShareCache;
+
+	private fileMenuEvent: EventRef;
 
 	async onload() {
 		await this.loadSettings();
+
+		this.cache = new FsCache(app);
+
 		this.noteSharingService = new NoteSharingService(
 			this.settings.serverUrl,
 			this.settings.anonymousUserId,
@@ -34,11 +41,34 @@ export default class NoteSharingPlugin extends Plugin {
 		// Add note sharing command
 		this.addCommands();
 
-		this.eventRef = this.app.workspace.on(
+		// Add event listeners
+		this.fileMenuEvent = this.app.workspace.on(
 			"file-menu",
 			(menu, file, source) => this.onMenuOpenCallback(menu, file, source)
 		);
-		this.registerEvent(this.eventRef);
+		this.registerEvent(this.fileMenuEvent);
+
+		this.registerEvent(
+			this.app.vault.on("rename", (file, oldPath) => {
+				if (!this.cache.has(file.path)) {
+					return;
+				}
+				this.cache.rename(oldPath, file.path);
+			})
+		);
+
+		this.registerEvent(
+			this.app.vault.on("delete", (file) => {
+				if (!this.cache.has(file.path)) {
+					return;
+				}
+				this.cache.set(file.path, (data) => ({
+					...data,
+					deleted_from_vault: true,
+				}));
+				console.log("deleted", file.path);
+			})
+		);
 	}
 
 	onunload() {}
@@ -99,7 +129,7 @@ export default class NoteSharingPlugin extends Plugin {
 			.shareNote(body, { title })
 			.then((res) => {
 				if (this.settings.useFrontmatter) {
-					const datetime = moment(new Date()).format(
+					const datetime = moment().format(
 						this.settings.frontmatterDateFormat ||
 							DEFAULT_SETTINGS.frontmatterDateFormat
 					);
@@ -108,6 +138,15 @@ export default class NoteSharingPlugin extends Plugin {
 						datetime: datetime,
 					});
 				}
+
+				// NOTE: this is an async call, but we don't need to wait for it
+				this.cache.set(file.path, {
+					shared_datetime: moment().toISOString(),
+					updated_datetime: moment().toISOString(),
+					expire_datetime: res.expire_time.toISOString(),
+					view_url: res.view_url,
+					secret_token: res.secret_token,
+				});
 
 				new SharedNoteSuccessModal(
 					this,

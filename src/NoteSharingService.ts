@@ -15,6 +15,7 @@ type JsonPayload = {
 type Response = {
 	view_url: string;
 	expire_time: Moment;
+	secret_token: string;
 };
 
 export class NoteSharingService {

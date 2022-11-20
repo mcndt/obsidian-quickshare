@@ -2,6 +2,7 @@ import esbuild from "esbuild";
 import process from "process";
 import builtins from "builtin-modules";
 
+import eslint from "esbuild-plugin-eslint";
 import esbuildSvelte from "esbuild-svelte";
 import sveltePreprocess from "svelte-preprocess";
 
@@ -41,6 +42,7 @@ esbuild
 				compilerOptions: { css: true },
 				preprocess: sveltePreprocess(),
 			}),
+			eslint(),
 		],
 		external: [
 			"obsidian",

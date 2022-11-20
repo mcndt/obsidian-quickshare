@@ -1,5 +1,13 @@
 import type NoteSharingPlugin from "main";
-import { App, PluginSettingTab, Setting, TextComponent } from "obsidian";
+import {
+	App,
+	Notice,
+	PluginSettingTab,
+	Setting,
+	TextComponent,
+} from "obsidian";
+import { FsCache } from "src/lib/cache/FsCache";
+import { LocalStorageCache } from "src/lib/cache/LocalStorageCache";
 import { DEFAULT_SETTINGS } from "./PluginSettings";
 
 export default class SettingsTab extends PluginSettingTab {
@@ -21,6 +29,7 @@ export default class SettingsTab extends PluginSettingTab {
 
 		containerEl.empty();
 
+		// General settings
 		containerEl.createEl("h2", { text: "QuickShare" });
 
 		new Setting(containerEl)
@@ -43,6 +52,35 @@ export default class SettingsTab extends PluginSettingTab {
 								this.plugin.settings.serverUrl
 							);
 						}
+						await this.plugin.saveSettings();
+					})
+			);
+
+		new Setting(containerEl)
+			.setName("Sync QuickShare data across devices")
+			.setDesc(
+				`By default, QuickShare keeps the access keys for your shared
+				notes in a hidden file in your vault. This enables updating or deleting of QuickShare notes from multiple
+				devices when using Obsidian Sync. If your vault folder is shared or public, it is recommended that you turn this setting off.`
+			)
+			.addToggle((text) =>
+				text
+					.setValue(this.plugin.settings.useFsCache)
+					.onChange(async (value) => {
+						try {
+							const newCache = value
+								? await new FsCache(this.app).init()
+								: await new LocalStorageCache(this.app).init();
+							await newCache.copy(this.plugin.$cache);
+							await this.plugin.$cache.$deleteAllData();
+							this.plugin.$cache = newCache;
+						} catch {
+							new Notice(
+								"Could not change cache type. Please report a bug."
+							);
+							return;
+						}
+						this.plugin.settings.useFsCache = value;
 						await this.plugin.saveSettings();
 					})
 			);

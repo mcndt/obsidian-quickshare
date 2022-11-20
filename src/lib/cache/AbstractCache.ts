@@ -17,6 +17,10 @@ export interface QuickShareCache {
 	rename: (oldFileId: FileId, newFileId: FileId) => Promise<void>;
 	has: (fileId: FileId) => Promise<boolean>;
 	list: () => Promise<QuickShareData[]>;
+	copy: (cache: QuickShareCache) => Promise<void>;
+
+	$getCache: () => Promise<Record<FileId, QuickShareData>>;
+	$deleteAllData: () => Promise<void>;
 }
 
 export type CacheObject = Record<FileId, QuickShareData>;
@@ -67,6 +71,20 @@ export abstract class AbstractCache implements QuickShareCache {
 			...data,
 		}));
 	}
+
+	/** Copies the contents of the passed cache to this cache. */
+	public async copy(cache: QuickShareCache): Promise<void> {
+		const data = await cache.$getCache();
+		this._writeCache(data);
+	}
+
+	public async $getCache(): Promise<Record<FileId, QuickShareData>> {
+		return this._getCache();
+	}
+
+	public abstract $deleteAllData(): Promise<void>;
+
+	public abstract init(): Promise<QuickShareCache>;
 
 	protected abstract _getCache(): Promise<CacheObject>;
 

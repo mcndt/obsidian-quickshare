@@ -1,5 +1,9 @@
 import type { App } from "obsidian";
-import { AbstractCache, type CacheObject } from "./AbstractCache";
+import {
+	AbstractCache,
+	type CacheObject,
+	type QuickShareCache,
+} from "./AbstractCache";
 
 export class FsCache extends AbstractCache {
 	private _app: App;
@@ -8,7 +12,11 @@ export class FsCache extends AbstractCache {
 	constructor(app: App) {
 		super();
 		this._app = app;
+	}
+
+	public async init(): Promise<QuickShareCache> {
 		this._fetchCache();
+		return this;
 	}
 
 	protected async _getCache(): Promise<CacheObject> {
@@ -30,6 +38,11 @@ export class FsCache extends AbstractCache {
 		} catch (e) {
 			this._cache = {};
 		}
+	}
+
+	public async $deleteAllData(): Promise<void> {
+		await this._app.vault.adapter.remove(this._cachePath);
+		this._cache = {};
 	}
 
 	private get _cachePath(): string {

@@ -105,6 +105,29 @@ export default class NoteSharingPlugin extends Plugin {
 				this.shareNote(activeView.file);
 			},
 		});
+
+		this.addCommand({
+			id: "obsidian-quickshare-delete-note",
+			name: "Unshare note",
+			checkCallback: (checking: boolean) => {
+				// Only works on Markdown views
+				const activeView =
+					this.app.workspace.getActiveViewOfType(MarkdownView);
+				if (!activeView) return false;
+
+				if (
+					(checking && !this.cache.has(activeView.file.path)) ||
+					this.cache.get(activeView.file.path).deleted_from_server
+				) {
+					return false;
+				}
+				if (checking) {
+					console.log("Unshared note: ", activeView.file.path);
+					return true;
+				}
+				this.deleteNote(activeView.file);
+			},
+		});
 	}
 
 	// https://github.dev/platers/obsidian-linter/blob/c30ceb17dcf2c003ca97862d94cbb0fd47b83d52/src/main.ts#L139-L149
@@ -149,6 +172,7 @@ export default class NoteSharingPlugin extends Plugin {
 					expire_datetime: res.expire_time.toISOString(),
 					view_url: res.view_url,
 					secret_token: res.secret_token,
+					note_id: res.note_id,
 				});
 
 				new SharedNoteSuccessModal(
@@ -157,10 +181,30 @@ export default class NoteSharingPlugin extends Plugin {
 					res.expire_time
 				).open();
 			})
-			.catch((err: Error) => {
-				console.error(err);
-				new Notice(err.message, 7500);
-			});
+			.catch(this.handleSharingError);
+	}
+
+	async deleteNote(file: TFile) {
+		const { setFrontmatterKeys } = useFrontmatterHelper(this.app);
+
+		const cacheData = this.cache.get(file.path);
+		if (!cacheData) {
+			return;
+		}
+		this.noteSharingService
+			.deleteNote(cacheData.note_id, cacheData.secret_token)
+			.then(() => {
+				setFrontmatterKeys(file, {
+					url: `"Removed"`,
+					datetime: `"N/A"`,
+				});
+				this.cache.set(file.path, (data) => ({
+					...data,
+					deleted_from_server: true,
+				}));
+				new Notice(`Unshared note: "${file.basename}"`, 7500);
+			})
+			.catch(this.handleSharingError);
 	}
 
 	public set $cache(cache: QuickShareCache) {
@@ -169,5 +213,10 @@ export default class NoteSharingPlugin extends Plugin {
 
 	public get $cache() {
 		return this.cache;
+	}
+
+	private handleSharingError(err: Error) {
+		console.error(err);
+		new Notice(err.message, 7500);
 	}
 }

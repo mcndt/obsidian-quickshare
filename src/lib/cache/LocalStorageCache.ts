@@ -19,7 +19,7 @@ export class LocalStorageCache extends AbstractCache {
 		return this;
 	}
 
-	protected async _getCache(): Promise<CacheObject> {
+	protected _getCache(): CacheObject {
 		return this._cache ?? {};
 	}
 

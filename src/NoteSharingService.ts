@@ -16,6 +16,7 @@ type Response = {
 	view_url: string;
 	expire_time: Moment;
 	secret_token: string;
+	note_id: string;
 };
 
 export class NoteSharingService {
@@ -51,6 +52,21 @@ export class NoteSharingService {
 		res.view_url += `#${key}`;
 		console.log(`Note shared: ${res.view_url}`);
 		return res;
+	}
+
+	public async deleteNote(
+		noteId: string,
+		secretToken: string
+	): Promise<void> {
+		await requestUrl({
+			url: `${this._url}/api/note/${noteId}`,
+			method: "DELETE",
+			contentType: "application/json",
+			body: JSON.stringify({
+				user_id: this._userId,
+				secret_token: secretToken,
+			}),
+		});
 	}
 
 	private async postNote(ciphertext: string, iv: string): Promise<Response> {

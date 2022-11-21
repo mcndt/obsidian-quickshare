@@ -55,14 +55,12 @@ async function _setFrontmatterKeys(
 	app: App
 ) {
 	let content = await app.vault.read(file);
-
 	for (const [key, value] of Object.entries(records)) {
 		if (_getFrontmatterKey(file, key, app) !== value) {
 			content = _setFrontmatterKey(file, key, value, content);
 		}
 	}
-
-	app.vault.modify(file, content);
+	await app.vault.modify(file, content);
 }
 
 export function useFrontmatterHelper(app: App) {

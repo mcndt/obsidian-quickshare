@@ -1,3 +1,5 @@
+import { updateReactiveCache } from "./CacheStore";
+
 export type QuickShareData = {
 	shared_datetime: string;
 	updated_datetime: string;
@@ -7,6 +9,7 @@ export type QuickShareData = {
 	deleted_from_vault?: boolean;
 	deleted_from_server?: boolean;
 	note_id: string;
+	basename: string;
 };
 
 type FileId = string;
@@ -25,6 +28,8 @@ export interface QuickShareCache {
 }
 
 export type CacheObject = Record<FileId, QuickShareData>;
+
+export type QuickShareDataList = (QuickShareData & { fileId: string })[];
 
 export abstract class AbstractCache implements QuickShareCache {
 	/** Get the QuickShareData for file with id. */
@@ -47,7 +52,7 @@ export abstract class AbstractCache implements QuickShareCache {
 		} else {
 			cache[fileId] = data;
 		}
-		this._writeCache(cache);
+		this.writeCache(cache);
 	}
 
 	/** Check if file with id is in cache. */
@@ -57,15 +62,22 @@ export abstract class AbstractCache implements QuickShareCache {
 	}
 
 	/** Move the cache data to a new key and delete the old key. */
-	public async rename(fileId: FileId, newFileId: FileId): Promise<void> {
+	public async rename(
+		oldFileId: FileId,
+		newFileId: string,
+		newBasename?: string
+	): Promise<void> {
 		const cache = this._getCache();
-		cache[newFileId] = cache[fileId];
-		delete cache[fileId];
-		this._writeCache(cache);
+		cache[newFileId] = cache[oldFileId];
+		delete cache[oldFileId];
+		if (newBasename) {
+			cache[newFileId].basename = newBasename;
+		}
+		return this.writeCache(cache);
 	}
 
 	/** Get a list of QuickShareData for this vault. */
-	public async list(): Promise<(QuickShareData & { fileId: string })[]> {
+	public async list(): Promise<QuickShareDataList> {
 		const cache = this._getCache();
 		return Object.entries(cache).map(([fileId, data]) => ({
 			fileId,
@@ -76,18 +88,29 @@ export abstract class AbstractCache implements QuickShareCache {
 	/** Copies the contents of the passed cache to this cache. */
 	public async copy(cache: QuickShareCache): Promise<void> {
 		const data = await cache.$getCache();
-		this._writeCache(data);
+		this.writeCache(data);
 	}
 
 	public async $getCache(): Promise<Record<FileId, QuickShareData>> {
 		return this._getCache();
 	}
 
+	private async writeCache(object: CacheObject): Promise<void> {
+		await this._writeCache(object);
+		updateReactiveCache(await this.list());
+	}
+
+	public async init(): Promise<QuickShareCache> {
+		const cache = await this._init();
+		updateReactiveCache(await this.list());
+		return cache;
+	}
+
 	public abstract $deleteAllData(): Promise<void>;
 
-	public abstract init(): Promise<QuickShareCache>;
+	protected abstract _init(): Promise<QuickShareCache>;
 
 	protected abstract _getCache(): CacheObject;
 
-	protected abstract _writeCache(object: CacheObject): void;
+	protected abstract _writeCache(object: CacheObject): Promise<void>;
 }

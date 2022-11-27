@@ -5,6 +5,7 @@ import {
 	Plugin,
 	TAbstractFile,
 	TFile,
+	WorkspaceLeaf,
 } from "obsidian";
 import { NoteSharingService } from "src/NoteSharingService";
 import { DEFAULT_SETTINGS } from "src/obsidian/PluginSettings";
@@ -17,6 +18,12 @@ import moment from "moment";
 import type { QuickShareCache } from "src/lib/cache/AbstractCache";
 import { LocalStorageCache } from "src/lib/cache/LocalStorageCache";
 import { FsCache } from "src/lib/cache/FsCache";
+import { QuickShareSideView } from "src/ui/QuickShareSideView";
+import { writable } from "svelte/store";
+
+const { subscribe, set: setPluginStore } = writable<NoteSharingPlugin>(null);
+
+export const PluginStore = { subscribe };
 
 export default class NoteSharingPlugin extends Plugin {
 	public settings: PluginSettings;
@@ -26,6 +33,7 @@ export default class NoteSharingPlugin extends Plugin {
 	private fileMenuEvent: EventRef;
 
 	async onload() {
+		setPluginStore(this);
 		await this.loadSettings();
 
 		this.cache = this.settings.useFsCache
@@ -53,10 +61,11 @@ export default class NoteSharingPlugin extends Plugin {
 
 		this.registerEvent(
 			this.app.vault.on("rename", (file, oldPath) => {
-				if (!this.cache.has(file.path)) {
+				if (!this.cache.has(oldPath)) {
 					return;
 				}
 				this.cache.rename(oldPath, file.path);
+				console.log("renamed", file.path);
 			})
 		);
 
@@ -72,6 +81,28 @@ export default class NoteSharingPlugin extends Plugin {
 				console.log("deleted", file.path);
 			})
 		);
+
+		// Register the sidebar view
+		this.registerView(
+			QuickShareSideView.viewType,
+			(leaf: WorkspaceLeaf) => new QuickShareSideView(leaf)
+		);
+
+		// Add the view to the right sidebar
+		this.app.workspace.onLayoutReady(this.initLeaf.bind(this));
+	}
+
+	async initLeaf() {
+		if (
+			this.app.workspace.getLeavesOfType(QuickShareSideView.viewType)
+				.length
+		) {
+			return;
+		}
+		await this.app.workspace.getRightLeaf(false).setViewState({
+			type: QuickShareSideView.viewType,
+			active: true,
+		});
 	}
 
 	onunload() {}
@@ -122,7 +153,6 @@ export default class NoteSharingPlugin extends Plugin {
 					return false;
 				}
 				if (checking) {
-					console.log("Unshared note: ", activeView.file.path);
 					return true;
 				}
 				this.deleteNote(activeView.file);
@@ -168,11 +198,12 @@ export default class NoteSharingPlugin extends Plugin {
 				// NOTE: this is an async call, but we don't need to wait for it
 				this.cache.set(file.path, {
 					shared_datetime: moment().toISOString(),
-					updated_datetime: moment().toISOString(),
+					updated_datetime: null,
 					expire_datetime: res.expire_time.toISOString(),
 					view_url: res.view_url,
 					secret_token: res.secret_token,
 					note_id: res.note_id,
+					basename: file.basename,
 				});
 
 				new SharedNoteSuccessModal(
@@ -184,25 +215,35 @@ export default class NoteSharingPlugin extends Plugin {
 			.catch(this.handleSharingError);
 	}
 
-	async deleteNote(file: TFile) {
+	async deleteNote(file: TFile | string) {
 		const { setFrontmatterKeys } = useFrontmatterHelper(this.app);
 
-		const cacheData = this.cache.get(file.path);
+		const _file =
+			typeof file === "string"
+				? this.app.vault.getMarkdownFiles().find((f) => f.path === file)
+				: file;
+
+		if (!_file) {
+			return;
+		}
+
+		const cacheData = this.cache.get(_file.path);
 		if (!cacheData) {
 			return;
 		}
 		this.noteSharingService
 			.deleteNote(cacheData.note_id, cacheData.secret_token)
 			.then(() => {
-				setFrontmatterKeys(file, {
+				setFrontmatterKeys(_file, {
 					url: `"Removed"`,
 					datetime: `"N/A"`,
 				});
-				this.cache.set(file.path, (data) => ({
+				this.cache.set(_file.path, (data) => ({
 					...data,
 					deleted_from_server: true,
 				}));
-				new Notice(`Unshared note: "${file.basename}"`, 7500);
+				new Notice(`Unshared note: "${_file.basename}"`, 7500);
+				console.info("Unshared note: ", _file.path);
 			})
 			.catch(this.handleSharingError);
 	}

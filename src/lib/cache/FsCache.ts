@@ -14,8 +14,8 @@ export class FsCache extends AbstractCache {
 		this._app = app;
 	}
 
-	public async init(): Promise<QuickShareCache> {
-		this._fetchCache();
+	public async _init(): Promise<QuickShareCache> {
+		await this._fetchCache();
 		return this;
 	}
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.3.0]
+
+-   feat: You can now unshare notes before they expire from the server.
+-   feat: Quickshare now has a sidebar panel to visually see your recently shared notes.
+
 ## [1.2.0]
 
 -   feat: the plugin now shares the note's name as title (like Obsidian's "show inline title" option in the appearance settings). This behavior can be disabled in the plugin's settings.

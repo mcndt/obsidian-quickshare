@@ -164,7 +164,7 @@ export default class NoteSharingPlugin extends Plugin {
 				if (checking) {
 					return true;
 				}
-				this.deleteNote(activeView.file);
+				this.deleteNote(activeView.file.path);
 			},
 		});
 	}
@@ -224,35 +224,37 @@ export default class NoteSharingPlugin extends Plugin {
 			.catch(this.handleSharingError);
 	}
 
-	async deleteNote(file: TFile | string) {
+	async deleteNote(fileId: string) {
 		const { setFrontmatterKeys } = useFrontmatterHelper(this.app);
 
-		const _file =
-			typeof file === "string"
-				? this.app.vault.getMarkdownFiles().find((f) => f.path === file)
-				: file;
+		const cacheData = this.cache.get(fileId);
 
-		if (!_file) {
-			return;
-		}
-
-		const cacheData = this.cache.get(_file.path);
 		if (!cacheData) {
 			return;
 		}
+
 		this.noteSharingService
 			.deleteNote(cacheData.note_id, cacheData.secret_token)
 			.then(() => {
+				this.cache.set(fileId, (data) => ({
+					...data,
+					deleted_from_server: true,
+				}));
+				new Notice(`Unshared note: "${cacheData.basename}"`, 7500);
+				console.info("Unshared note: ", fileId);
+
+				const _file = this.app.vault
+					.getMarkdownFiles()
+					.find((f) => f.path === fileId);
+
+				if (!_file) {
+					return;
+				}
+
 				setFrontmatterKeys(_file, {
 					url: `"Removed"`,
 					datetime: `"N/A"`,
 				});
-				this.cache.set(_file.path, (data) => ({
-					...data,
-					deleted_from_server: true,
-				}));
-				new Notice(`Unshared note: "${_file.basename}"`, 7500);
-				console.info("Unshared note: ", _file.path);
 			})
 			.catch(this.handleSharingError);
 	}

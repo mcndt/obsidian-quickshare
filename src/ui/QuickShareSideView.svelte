@@ -12,8 +12,7 @@
 	import ActiveCacheFile from "src/lib/stores/ActiveCacheFile";
 
 	let data: QuickShareDataList;
-
-	$: data = $CacheStore;
+	let filteredData: QuickShareDataList;
 
 	function hasExpired(data: QuickShareData) {
 		const expiration = moment(data.expire_datetime);
@@ -87,6 +86,11 @@
 		$PluginStore.shareNote(file);
 	}
 
+	$: data = $CacheStore;
+	$: filteredData = data?.filter(
+		(d) => !deletedFromServer(d) && !(deletedFromVault(d) && hasExpired(d))
+	);
+
 	onMount(() => {
 		// Force a rerender every 30 seconds to update rendered timestamps
 		const timer = window.setInterval(() => {
@@ -154,10 +158,13 @@
 	<div id="history">
 		<div class="history-header">Recently shared</div>
 		<div class="history-list">
-			{#each data as item}
+			{#each filteredData as item}
 				<!-- svelte-ignore a11y-unknown-aria-attribute -->
 				<div
-					aria-label="Click to open note"
+					aria-label={!deletedFromVault(item)
+						? `Click to open note`
+						: undefined}
+					aria-label-position="left"
 					class="history-item 
 					{hasExpired(item) && 'history-item--expired'}
 					{deletedFromServer(item) && 'history-item--deleted-server'}
@@ -166,9 +173,18 @@
 					<div class="item-row">
 						<div
 							class="item-description"
-							on:click={() => onOpenNote(item.fileId)}
+							on:click={() =>
+								!deletedFromVault(item) &&
+								onOpenNote(item.fileId)}
 						>
-							<div class="item-name">{item.basename}</div>
+							<div class="item-name">
+								{item.basename}
+								{#if deletedFromVault(item)}
+									<span class="deleted-text">
+										(Deleted from vault)
+									</span>
+								{/if}
+							</div>
 							<div class="item-sub">
 								{getSubText(item)}
 							</div>
@@ -274,6 +290,12 @@
 					color: var(--text-faint);
 				}
 
+				.item-deleted-vault {
+					font-size: 85%;
+					color: var(--text-error);
+					margin-top: 4px;
+				}
+
 				&:hover {
 					background-color: var(--nav-item-background-hover);
 					font-weight: var(--nav-item-weight-hover);
@@ -289,6 +311,12 @@
 				&--deleted-server {
 					.item-name {
 						color: var(--text-faint);
+					}
+				}
+
+				&--deleted-vault {
+					.item-name {
+						color: var(--text-error);
 					}
 				}
 			}

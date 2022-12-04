@@ -230,8 +230,6 @@
 				text-overflow: ellipsis;
 				white-space: nowrap;
 				vertical-align: top;
-				// max-width: 200px;
-				min-width: 0;
 			}
 		}
 	}

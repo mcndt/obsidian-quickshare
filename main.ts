@@ -20,6 +20,7 @@ import { LocalStorageCache } from "src/lib/cache/LocalStorageCache";
 import { FsCache } from "src/lib/cache/FsCache";
 import { QuickShareSideView } from "src/ui/QuickShareSideView";
 import { writable } from "svelte/store";
+import { setActiveMdFile } from "src/lib/stores/ActiveMdFile";
 
 const { subscribe, set: setPluginStore } = writable<NoteSharingPlugin>(null);
 
@@ -79,6 +80,14 @@ export default class NoteSharingPlugin extends Plugin {
 					deleted_from_vault: true,
 				}));
 				console.log("deleted", file.path);
+			})
+		);
+
+		this.registerEvent(
+			this.app.workspace.on("active-leaf-change", (leaf) => {
+				if (leaf.view instanceof MarkdownView) {
+					setActiveMdFile(leaf.view.file);
+				}
 			})
 		);
 

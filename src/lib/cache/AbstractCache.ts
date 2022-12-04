@@ -1,4 +1,4 @@
-import { updateReactiveCache } from "./CacheStore";
+import { updateReactiveCache } from "../stores/CacheStore";
 
 export type QuickShareData = {
 	shared_datetime: string;

@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import type { QuickShareDataList } from "./AbstractCache";
+import type { QuickShareDataList } from "../cache/AbstractCache";
 
 const { subscribe, set } = writable<QuickShareDataList>([]);
 

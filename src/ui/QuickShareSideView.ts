@@ -3,7 +3,7 @@ import QuickShareSideViewComponent from "./QuickShareSideView.svelte";
 export class QuickShareSideView extends ItemView {
 	static viewType = "QUICKSHARE_SIDE_VIEW";
 
-	public navigation = true;
+	public navigation = false;
 
 	private component: QuickShareSideViewComponent;
 

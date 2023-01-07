@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.3.1]
+
+-   fix: Make sidebar pane non-navigable (Thanks [kometenstaub](https://github.com/mcndt/obsidian-quickshare/issues/27))
+
 ## [1.3.0]
 
 -   feat: You can now unshare notes before they expire from the server.
